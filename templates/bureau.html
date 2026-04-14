@@ -97,7 +97,7 @@
 
         <!-- Alertes Messages -->
         <div class="alertes">
-            <h3><i class="fas fa-bell mr-3"></i>Alertes & Messages ({{ messages_non_lus }} non lus)</h3>
+            <h3><i class="fas fa-bell mr-3"></i>Messages ({{ messages_non_lus }} non lus)</h3>
             <div id="alertes-container" class="space-y-3">
                 <!-- Messages chargés par JS -->
             </div>
@@ -105,7 +105,7 @@
 
         <!-- Messagerie Inter-Services -->
         <div class="messagerie">
-            <h3><i class="fas fa-comments mr-3"></i>Messagerie Inter-Services</h3>
+            <h3><i class="fas fa-comments mr-3"></i>Inter-Services</h3>
             <div class="messages-list" id="messages-list">
                 <!-- Messages dynamiques -->
             </div>
@@ -133,44 +133,44 @@
                 <div class="nav-card nav-active" onclick="window.location.href='/direction'">
                     <div class="nav-icon"><i class="fas fa-chart-line text-4xl text-blue-400"></i></div>
                     <div class="nav-title">Direction</div>
-                    <p class="text-sm text-slate-400">Tableau bord global + alertes</p>
+                    <p class="text-sm text-slate-400">alertes</p>
                 </div>
             {% endif %}
             
             <div class="nav-card {% if session.service == 'finance' %}nav-active{% endif %}" onclick="window.location.href='/finance'">
                 <div class="nav-icon"><i class="fas fa-coins text-yellow-400"></i></div>
                 <div class="nav-title">Finance</div>
-                <p class="text-sm text-slate-400">Trésorerie + transactions</p>
+                <p class="text-sm text-slate-400">Trésorerie</p>
             </div>
             
             <div class="nav-card {% if session.service == 'location' %}nav-active{% endif %}" onclick="window.location.href='/location'">
                 <div class="nav-icon"><i class="fas fa-car text-green-400"></i></div>
                 <div class="nav-title">Location Voiture</div>
-                <p class="text-sm text-slate-400">Enregistrer locations</p>
+                <p class="text-sm text-slate-400">locations</p>
             </div>
             
             <div class="nav-card {% if session.service == 'formation' %}nav-active{% endif %}" onclick="window.location.href='/formation'">
                 <div class="nav-icon"><i class="fas fa-graduation-cap text-purple-400"></i></div>
                 <div class="nav-title">Formation</div>
-                <p class="text-sm text-slate-400">Inscriptions formations</p>
+                <p class="text-sm text-slate-400">formations</p>
             </div>
             
             <div class="nav-card {% if session.service == 'travail' %}nav-active{% endif %}" onclick="window.location.href='/travail'">
                 <div class="nav-icon"><i class="fas fa-briefcase text-orange-400"></i></div>
                 <div class="nav-title">Assistance Voyage</div>
-                <p class="text-sm text-slate-400">Dossiers clients</p>
+                <p class="text-sm text-slate-400">clients</p>
             </div>
             
             <div class="nav-card {% if session.service == 'strayant' %}nav-active{% endif %}" onclick="window.location.href='/strayant'">
                 <div class="nav-icon"><i class="fas fa-handshake text-pink-400"></i></div>
                 <div class="nav-title">Sous-Traitance</div>
-                <p class="text-sm text-slate-400">Agents affectés</p>
+                <p class="text-sm text-slate-400">affectés</p>
             </div>
             
             <div class="nav-card" onclick="window.location.href='/reception'">
                 <div class="nav-icon"><i class="fas fa-door-open text-red-400"></i></div>
                 <div class="nav-title">Réception</div>
-                <p class="text-sm text-slate-400">Visiteurs & motifs</p>
+                <p class="text-sm text-slate-400"></p>
             </div>
         </div>
 
@@ -179,17 +179,17 @@
             <div class="glass-panel p-6 rounded-2xl text-center">
                 <i class="fas fa-coins text-3xl text-emerald-400 mb-2"></i>
                 <div class="text-2xl font-bold" id="total-recettes">-</div>
-                <div class="text-sm text-slate-400">Recettes Total</div>
+                <div class="text-sm text-slate-400">Recettes</div>
             </div>
             <div class="glass-panel p-6 rounded-2xl text-center">
                 <i class="fas fa-arrow-down text-3xl text-red-400 mb-2"></i>
                 <div class="text-2xl font-bold" id="total-depenses">-</div>
-                <div class="text-sm text-slate-400">Dépenses Total</div>
+                <div class="text-sm text-slate-400">Dépenses</div>
             </div>
             <div class="glass-panel p-6 rounded-2xl text-center">
                 <i class="fas fa-car text-3xl text-blue-400 mb-2"></i>
                 <div class="text-2xl font-bold" id="nb-locations">-</div>
-                <div class="text-sm text-slate-400">Locations Actives</div>
+                <div class="text-sm text-slate-400">Locations</div>
             </div>
             <div class="glass-panel p-6 rounded-2xl text-center">
                 <i class="fas fa-users text-3xl text-purple-400 mb-2"></i>
@@ -262,8 +262,8 @@
         // Stats live
         async function chargerStats() {
             // Mock stats (à connecter API)
-            document.getElementById('total-recettes').textContent = '2,450,000 FCFA';
-            document.getElementById('total-depenses').textContent = '1,230,000 FCFA';
+            document.getElementById('total-recettes').textContent = '2,450,000 ';
+            document.getElementById('total-depenses').textContent = '1,230,000 ';
             document.getElementById('nb-locations').textContent = '15';
         }
 
