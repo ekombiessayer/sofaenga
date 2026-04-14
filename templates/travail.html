@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>SOFAENGA - Assistance Voyage</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <style>
+        body { 
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 30%, #3b82f6 70%, #60a5fa 100%);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header glass" style="background: rgba(255,255,255,0.1); padding: 40px; margin-bottom: 40px; text-align: center;">
+            <h1 style="font-size: 3.5em; font-weight: 800; margin-bottom: 20px;">
+                <i class="fas fa-plane-departure"></i> Assistance Voyage
+            </h1>
+            <div style="font-size: 1.3em; opacity: 0.95;">
+                <span id="total-dossiers">0</span> dossiers actifs | 
+                <span id="total-rdv">0</span> RDV consulats
+            </div>
+            
+            <!-- Navigation -->
+            <div style="margin-top: 30px; display: flex; gap: 15px; justify-content: center; flex-wrap: wrap;">
+                <a href="/" class="btn-primary" style="padding: 15px 30px;"><i class="fas fa-home mr-2"></i>Accueil</a>
+                <a href="/bureau" class="btn-secondary" style="padding: 15px 30px;"><i class="fas fa-tachometer-alt mr-2"></i>Bureau</a>
+                <a href="/finance" class="btn-ghost" style="padding: 15px 30px;"><i class="fas fa-coins mr-2"></i>Finances</a>
+                <a href="/logout" class="btn-danger" style="padding: 15px 30px;"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+            </div>
+        </div>
+
+        <!-- Formulaire Dossier Voyage -->
+        <div class="glass p-12 mb-12" style="max-width: 1200px; margin: 0 auto;">
+            <h2 style="font-size: 2.5em; font-weight: 800; text-align: center; margin-bottom: 40px; color: white;">
+                ✈️ Nouveau Dossier Voyage
+            </h2>
+            <form action="/enregistrer_voyage" method="POST" id="form-voyage">
+                <div class="form-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 30px; margin-bottom: 40px;">
+                    <!-- Client -->
+                    <div class="form-group">
+                        <label class="form-label">👤 Nom Client <span style="color: #ef4444;">*</span></label>
+                        <input type="text" name="nom_client" class="form-input" placeholder="M. Jean Dupont" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">📱 WhatsApp <span style="color: #ef4444;">*</span></label>
+                        <input type="tel" name="tel" class="form-input" placeholder="243 81x xxx xxx" required>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">🌍 Destination <span style="color: #ef4444;">*</span></label>
+                        <select name="destination" class="form-select" required>
+                            <option value="">Choisir pays...</option>
+                            <option value="USA">🇺🇸 États-Unis (visa B1/B2)</option>
+                            <option value="Canada">🇨🇦 Canada (visa visiteur)</option>
+                            <option value="Schengen">🇪🇺 Schengen (Europe)</option>
+                            <option value="UK">🇬🇧 Royaume-Uni</option>
+                            <option value="Dubai">🇦🇪 Dubai/Émirats</option>
+                            <option value="Autres">🌍 Autres destinations</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">📋 Type Document <span style="color: #ef4444;">*</span></label>
+                        <select name="type_document" class="form-select" required>
+                            <option value="">Choisir...</option>
+                            <option value="visa">Visa</option>
+                            <option value="passeport">Passeport</option>
+                            <option value="rdv-consulat">RDV Consulat</option>
+                            <option value="autres">Autres documents</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">💰 Montant Accompté</label>
+                        <input type="number" name="montant" class="form-input" step="5000" min="0" placeholder="50000 FCFA">
+                    </div>
+                    <div class="form-group">
+                        <label class="form-label">📝 Notes/Urgence</label>
+                        <textarea name="notes" class="form-textarea" rows="4" placeholder="Urgent visa USA... RDV mardi..."></textarea>
+                    </div>
+                </div>
+                
+                <div style="background: linear-gradient(135deg, #10b981, #059669); color: white; padding: 30px; border-radius: 20px; text-align: center; margin-bottom: 30px; font-weight: 700; font-size: 1.3em;">
+                    ✅ <strong>Enregistrement automatique Finance (recette)</strong> | WhatsApp client cliquable
+                </div>
+                
+                <button type="submit" class="btn-primary" style="width: 100%; padding: 25px; font-size: 1.4em;">
+                    <i class="fas fa-plane mr-3"></i> ✈️ ENREGISTRER DOSSIER + FINANCE
+                </button>
+            </form>
+        </div>
+
+        <!-- Historique Dossiers -->
+        <div class="glass p-10 mb-12 table-responsive">
+            <h2 style="font-size: 2.2em; font-weight: 800; margin-bottom: 30px; text-align: center;">
+                📋 Historique Dossiers ({{ voyages|length|default(0) }})
+            </h2>
+            {% if voyages %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Client</th>
+                        <th>Destination</th>
+                        <th>Document</th>
+                        <th>Montant</th>
+                        <th>Status</th>
+                        <th>WhatsApp</th>
+                        <th>Notes</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for v in voyages %}
+                    <tr>
+                        <td><strong>#{{ v.id }}</strong></td>
+                        <td style="font-weight: 600;">{{ v.nom_client }}</td>
+                        <td><span style="background: rgba(59,130,246,0.2); padding: 4px 12px; border-radius: 20px;">{{ v.destination }}</span></td>
+                        <td>{{ v.type_document }}</td>
+                        <td style="color: #10b981; font-weight: 700;">{{ "%.0f"|format(v.montant|default(0)) }} FCFA</td>
+                        <td>
+                            <span class="status-active">✅ Actif</span>
+                        </td>
+                        <td>
+                            <a href="https://wa.me/{{ v.tel }}" class="btn-secondary" style="padding: 8px 16px; font-size: 0.85em;" target="_blank">
+                                <i class="fab fa-whatsapp"></i> {{ v.tel }}
+                            </a>
+                        </td>
+                        <td style="font-size: 0.9em; opacity: 0.9;">{{ v.notes[:60] }}{% if v.notes|length > 60 %}...{% endif %}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot style="background: rgba(251,191,36,0.2);">
+                    <tr>
+                        <td colspan="4"><strong>TOTAL ACCOMPTES</strong></td>
+                        <td style="color: #10b981; font-size: 1.5em; font-weight: 800;">
+                            {{ "%.0f"|format(voyages|sum(attribute='montant')|default(0)) }} FCFA
+                        </td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tfoot>
+            </table>
+            {% else %}
+            <div style="text-align: center; padding: 80px; opacity: 0.7;">
+                <i class="fas fa-plane-departure" style="font-size: 8em; color: #60a5fa;"></i>
+                <h3 style="font-size: 2em; margin: 20px 0;">Aucun dossier voyage</h3>
+                <p>Ajoutez le premier dossier ci-dessus !</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Messagerie Voyage -->
+        <div class="glass p-8 messagerie-formation">
+            <h3 style="font-size: 1.8em; margin-bottom: 25px; display: flex; align-items: center;">
+                <i class="fas fa-comments mr-4"></i> Messagerie Voyage
+            </h3>
+            <div id="messages-voyage" style="max-height: 250px; overflow-y: auto; margin-bottom: 25px; padding: 20px; background: rgba(255,255,255,0.03); border-radius: 16px;"></div>
+            <div style="display: flex; gap: 15px;">
+                <input type="text" id="msg-voyage" placeholder="Message vers Finance/Direction..." 
+                       style="flex: 1; padding: 18px; border-radius: 20px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.08); color: white; font-size: 16px;">
+                <button onclick="envoyerMsgVoyage()" class="btn-primary" style="padding: 18px 30px; font-weight: 700;">
+                    <i class="fas fa-paper-plane"></i> Envoyer
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Stats live (mock)
+        document.getElementById('total-dossiers').textContent = '12';
+        document.getElementById('total-rdv').textContent = '5';
+
+        // Messagerie
+        async function chargerMessagesVoyage() {
+            try {
+                const res = await fetch('/get_messages');
+                const messages = await res.json();
+                document.getElementById('messages-voyage').innerHTML = 
+                    messages.map(m => `
+                        <div class="message-item">
+                            <strong style="color: #fbbf24;">${m.origine.toUpperCase()}</strong>: ${m.contenu}
+                            <span style="float: right; font-size: 0.8em; opacity: 0.7;">${m.date}</span>
+                        </div>
+                    `).join('');
+            } catch(e) { console.error('Messages:', e); }
+        }
+
+        async function envoyerMsgVoyage() {
+            const contenu = document.getElementById('msg-voyage').value.trim();
+            if (!contenu) return;
+            
+            await fetch('/send_message', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({service_dest: 'direction', contenu: '[VOYAGE] ' + contenu})
+            });
+            
+            document.getElementById('msg-voyage').value = '';
+            chargerMessagesVoyage();
+        }
+
+        // Init
+        chargerMessagesVoyage();
+        setInterval(chargerMessagesVoyage, 5000);
+        
+        document.getElementById('msg-voyage').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') envoyerMsgVoyage();
+        });
+
+        // Auto-complete destinations
+        const destinations = ['USA', 'Canada', 'Schengen', 'UK', 'Dubai'];
+        // (Fonctionnalité pro à ajouter)
+    </script>
+</body>
+</html>

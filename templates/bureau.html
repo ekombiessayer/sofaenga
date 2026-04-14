@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>SOFAENGA - Bureau {{ service|upper }} | Admin</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #1e3a8a 0%, #1e40af 50%, #1d4ed8 100%);
+            min-height: 100vh; padding: 20px; color: white;
+        }
+        .container { max-width: 1600px; margin: 0 auto; }
+        
+        /* Header */
+        .header { 
+            background: rgba(255,255,255,0.1); border-radius: 25px; padding: 30px; margin-bottom: 30px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.3); text-align: center; backdrop-filter: blur(20px);
+        }
+        .header h1 { font-size: 3rem; font-weight: 800; margin-bottom: 15px; text-shadow: 0 0 20px rgba(255,255,255,0.3); }
+        .service-badge { 
+            display: inline-block; background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+            color: white; padding: 12px 24px; border-radius: 50px; font-weight: 700; font-size: 1.1em;
+        }
+        
+        /* Navigation Services */
+        .nav-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 20px; margin-bottom: 40px;
+        }
+        .nav-card { 
+            background: rgba(255,255,255,0.15); border-radius: 20px; padding: 30px; text-align: center;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.2);
+            transition: all 0.3s ease; cursor: pointer;
+        }
+        .nav-card:hover { transform: translateY(-10px); box-shadow: 0 30px 60px rgba(59,130,246,0.4); }
+        .nav-icon { font-size: 4rem; margin-bottom: 20px; opacity: 0.9; }
+        .nav-title { font-size: 1.4em; font-weight: 700; margin-bottom: 10px; }
+        .nav-active { background: linear-gradient(135deg, #3b82f6, #1d4ed8) !important; transform: scale(1.05) !important; }
+        
+        /* Alertes */
+        .alertes { 
+            background: rgba(255,255,255,0.1); border-radius: 20px; padding: 25px; margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); border-left: 5px solid #f59e0b;
+        }
+        .alertes h3 { font-size: 1.5em; font-weight: 700; margin-bottom: 15px; }
+        .alert-badge { 
+            background: #f59e0b; color: white; padding: 8px 16px; border-radius: 25px; 
+            font-weight: 600; font-size: 0.9em; animation: pulse 2s infinite;
+        }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        
+        /* Messagerie */
+        .messagerie { 
+            background: rgba(255,255,255,0.15); border-radius: 20px; padding: 25px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); backdrop-filter: blur(20px);
+        }
+        .messages-list { max-height: 300px; overflow-y: auto; margin-bottom: 20px; }
+        .message-item { 
+            background: rgba(255,255,255,0.1); padding: 15px; margin-bottom: 10px; 
+            border-radius: 15px; border-left: 4px solid #3b82f6;
+        }
+        .msg-input { 
+            width: 70%; padding: 15px; border: 2px solid rgba(255,255,255,0.3); 
+            border-radius: 15px; background: rgba(255,255,255,0.1); color: white;
+            font-size: 16px;
+        }
+        .msg-send { 
+            width: 28%; padding: 15px 20px; background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+            color: white; border: none; border-radius: 15px; font-weight: 700; cursor: pointer;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-grid { grid-template-columns: 1fr; }
+            .msg-input, .msg-send { width: 100%; margin-bottom: 10px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-tachometer-alt"></i> Bureau {{ service|upper }}</h1>
+            <span class="service-badge">
+                <i class="fas fa-shield-alt mr-2"></i>Service Actif: {{ service|title }}
+            </span>
+            <div class="mt-4 flex justify-center gap-4">
+                <a href="/logout" class="bg-red-600 hover:bg-red-500 px-6 py-3 rounded-xl font-bold text-sm uppercase tracking-wider transition">
+                    <i class="fas fa-sign-out-alt mr-2"></i>Déconnexion
+                </a>
+            </div>
+        </div>
+
+        <!-- Alertes Messages -->
+        <div class="alertes">
+            <h3><i class="fas fa-bell mr-3"></i>Alertes & Messages ({{ messages_non_lus }} non lus)</h3>
+            <div id="alertes-container" class="space-y-3">
+                <!-- Messages chargés par JS -->
+            </div>
+        </div>
+
+        <!-- Messagerie Inter-Services -->
+        <div class="messagerie">
+            <h3><i class="fas fa-comments mr-3"></i>Messagerie Inter-Services</h3>
+            <div class="messages-list" id="messages-list">
+                <!-- Messages dynamiques -->
+            </div>
+            <div class="flex gap-3">
+                <select id="service-dest" class="flex-1 p-3 border-2 border-white/30 rounded-xl bg-white/10 text-white">
+                    <option value="direction">Direction</option>
+                    <option value="finance">Finance</option>
+                    <option value="location">Location</option>
+                    <option value="formation">Formation</option>
+                    <option value="travail">Travail</option>
+                    <option value="strayant">Sous-traitance</option>
+                    <option value="reception">Réception</option>
+                </select>
+                <input type="text" id="msg-input" class="msg-input" placeholder="Tapez votre message...">
+                <button onclick="envoyerMessage()" class="msg-send">
+                    <i class="fas fa-paper-plane"></i> Envoyer
+                </button>
+            </div>
+        </div>
+
+        <!-- Navigation Services -->
+        <div class="nav-grid">
+            {% if session.service == 'direction' %}
+                <!-- Direction voit TOUS -->
+                <div class="nav-card nav-active" onclick="window.location.href='/direction'">
+                    <div class="nav-icon"><i class="fas fa-chart-line text-4xl text-blue-400"></i></div>
+                    <div class="nav-title">Direction</div>
+                    <p class="text-sm text-slate-400">Tableau bord global + alertes</p>
+                </div>
+            {% endif %}
+            
+            <div class="nav-card {% if session.service == 'finance' %}nav-active{% endif %}" onclick="window.location.href='/finance'">
+                <div class="nav-icon"><i class="fas fa-coins text-yellow-400"></i></div>
+                <div class="nav-title">Finance</div>
+                <p class="text-sm text-slate-400">Trésorerie + transactions</p>
+            </div>
+            
+            <div class="nav-card {% if session.service == 'location' %}nav-active{% endif %}" onclick="window.location.href='/location'">
+                <div class="nav-icon"><i class="fas fa-car text-green-400"></i></div>
+                <div class="nav-title">Location Voiture</div>
+                <p class="text-sm text-slate-400">Enregistrer locations</p>
+            </div>
+            
+            <div class="nav-card {% if session.service == 'formation' %}nav-active{% endif %}" onclick="window.location.href='/formation'">
+                <div class="nav-icon"><i class="fas fa-graduation-cap text-purple-400"></i></div>
+                <div class="nav-title">Formation</div>
+                <p class="text-sm text-slate-400">Inscriptions formations</p>
+            </div>
+            
+            <div class="nav-card {% if session.service == 'travail' %}nav-active{% endif %}" onclick="window.location.href='/travail'">
+                <div class="nav-icon"><i class="fas fa-briefcase text-orange-400"></i></div>
+                <div class="nav-title">Assistance Voyage</div>
+                <p class="text-sm text-slate-400">Dossiers clients</p>
+            </div>
+            
+            <div class="nav-card {% if session.service == 'strayant' %}nav-active{% endif %}" onclick="window.location.href='/strayant'">
+                <div class="nav-icon"><i class="fas fa-handshake text-pink-400"></i></div>
+                <div class="nav-title">Sous-Traitance</div>
+                <p class="text-sm text-slate-400">Agents affectés</p>
+            </div>
+            
+            <div class="nav-card" onclick="window.location.href='/reception'">
+                <div class="nav-icon"><i class="fas fa-door-open text-red-400"></i></div>
+                <div class="nav-title">Réception</div>
+                <p class="text-sm text-slate-400">Visiteurs & motifs</p>
+            </div>
+        </div>
+
+        <!-- Stats Rapides -->
+        <div class="grid md:grid-cols-4 gap-6 mb-8">
+            <div class="glass-panel p-6 rounded-2xl text-center">
+                <i class="fas fa-coins text-3xl text-emerald-400 mb-2"></i>
+                <div class="text-2xl font-bold" id="total-recettes">-</div>
+                <div class="text-sm text-slate-400">Recettes Total</div>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl text-center">
+                <i class="fas fa-arrow-down text-3xl text-red-400 mb-2"></i>
+                <div class="text-2xl font-bold" id="total-depenses">-</div>
+                <div class="text-sm text-slate-400">Dépenses Total</div>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl text-center">
+                <i class="fas fa-car text-3xl text-blue-400 mb-2"></i>
+                <div class="text-2xl font-bold" id="nb-locations">-</div>
+                <div class="text-sm text-slate-400">Locations Actives</div>
+            </div>
+            <div class="glass-panel p-6 rounded-2xl text-center">
+                <i class="fas fa-users text-3xl text-purple-400 mb-2"></i>
+                <div class="text-2xl font-bold" id="nb-messages">{{ messages_non_lus }}</div>
+                <div class="text-sm text-slate-400">Messages Non Lus</div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const serviceActif = '{{ session.service }}';
+        const WHATSAPP_NUM = '{{ WHATSAPP_NUM }}';
+
+        // Chargement messages
+        async function chargerMessages() {
+            try {
+                const res = await fetch('/get_messages');
+                const messages = await res.json();
+                
+                const container = document.getElementById('messages-list');
+                container.innerHTML = '';
+                
+                messages.forEach(msg => {
+                    const div = document.createElement('div');
+                    div.className = 'message-item';
+                    div.innerHTML = `
+                        <div class="flex justify-between items-start mb-2">
+                            <span class="font-bold text-blue-300">${msg.origine.toUpperCase()}</span>
+                            <span class="text-xs text-slate-400">${msg.date}</span>
+                        </div>
+                        <p>${msg.contenu}</p>
+                    `;
+                    if (!msg.lu) {
+                        fetch(`/marquer_lu/${msg.id}`);
+                        div.style.borderLeftColor = '#10b981';
+                    }
+                    container.appendChild(div);
+                });
+            } catch(e) {
+                console.error('Erreur messages:', e);
+            }
+        }
+
+        // Envoyer message
+        async function envoyerMessage() {
+            const serviceDest = document.getElementById('service-dest').value;
+            const contenu = document.getElementById('msg-input').value.trim();
+            
+            if (!contenu) return;
+            
+            try {
+                const res = await fetch('/send_message', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ service_dest: serviceDest, contenu: contenu })
+                });
+                const data = await res.json();
+                
+                if (data.success) {
+                    document.getElementById('msg-input').value = '';
+                    chargerMessages();
+                    // Alerte son
+                    new Audio('data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACBhYqFbF1fdJivrJBhNjVKMzU0RlM2NzU1MjIyMgCK').play();
+                }
+            } catch(e) {
+                alert('Erreur envoi');
+            }
+        }
+
+        // Stats live
+        async function chargerStats() {
+            // Mock stats (à connecter API)
+            document.getElementById('total-recettes').textContent = '2,450,000 FCFA';
+            document.getElementById('total-depenses').textContent = '1,230,000 FCFA';
+            document.getElementById('nb-locations').textContent = '15';
+        }
+
+        // Init
+        chargerMessages();
+        chargerStats();
+        setInterval(chargerMessages, 10000);  // Refresh 10s
+        
+        // Enter pour envoyer
+        document.getElementById('msg-input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') envoyerMessage();
+        });
+    </script>
+</body>
+</html>

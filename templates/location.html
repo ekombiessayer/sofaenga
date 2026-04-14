@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>SOFAENGA - Location Voiture</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 50%, #60a5fa 100%);
+            min-height: 100vh; padding: 20px; color: white;
+        }
+        .container { max-width: 1600px; margin: 0 auto; }
+        
+        /* Header */
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 3em; font-weight: 800; margin-bottom: 15px; text-shadow: 0 0 20px rgba(255,255,255,0.3); }
+        .header-stats { font-size: 1.3em; opacity: 0.95; display: flex; justify-content: center; gap: 40px; flex-wrap: wrap; }
+        .stat-item { background: rgba(255,255,255,0.15); padding: 15px 25px; border-radius: 20px; backdrop-filter: blur(10px); }
+
+        /* Navigation */
+        .nav-quick { 
+            background: rgba(255,255,255,0.15); border-radius: 25px; padding: 20px; margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); display: flex; gap: 15px; 
+            flex-wrap: wrap; justify-content: center; backdrop-filter: blur(20px);
+        }
+        .nav-btn { 
+            padding: 12px 24px; background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+            color: white; text-decoration: none; border-radius: 15px; 
+            font-weight: 600; transition: all 0.3s ease;
+        }
+        .nav-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(59,130,246,0.4); }
+
+        /* Formulaire Location */
+        .form-section { 
+            background: rgba(255,255,255,0.15); border-radius: 30px; padding: 50px; margin-bottom: 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.3); backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+        .form-title { color: white; margin-bottom: 40px; font-size: 2.5em; font-weight: 800; text-align: center; text-shadow: 0 0 20px rgba(255,255,255,0.3); }
+        
+        .form-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); 
+            gap: 30px; margin-bottom: 40px;
+        }
+        label { 
+            display: block; font-weight: 700; color: rgba(255,255,255,0.95); 
+            margin-bottom: 12px; font-size: 1.1em;
+        }
+        input, select { 
+            width: 100%; padding: 20px 25px; border: 3px solid rgba(255,255,255,0.3); 
+            border-radius: 20px; background: rgba(255,255,255,0.1); color: white;
+            font-size: 18px; font-weight: 500; backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+        input:focus, select:focus { 
+            outline: none; border-color: #60a5fa; box-shadow: 0 0 0 5px rgba(96,165,250,0.2);
+            background: rgba(255,255,255,0.2);
+        }
+        input::placeholder { color: rgba(255,255,255,0.7); }
+        select option { background: #1e40af; color: white; }
+        
+        /* Calculs Auto */
+        .calcul-auto { 
+            background: linear-gradient(135deg, #10b981, #059669); color: white; 
+            padding: 25px; border-radius: 20px; text-align: center; font-weight: 700;
+            font-size: 1.4em; box-shadow: 0 20px 40px rgba(16,185,129,0.3);
+            margin: 30px 0;
+        }
+        .champ-calcul { 
+            background: rgba(0,0,0,0.3); border: 2px solid #10b981; color: #10b981 !important;
+            font-weight: 800; font-size: 2em; text-align: center;
+        }
+        
+        .btn-enregistrer { 
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; 
+            padding: 28px 60px; border: none; border-radius: 25px; font-size: 1.5em; 
+            font-weight: 800; cursor: pointer; width: 100%; margin-top: 30px;
+            transition: all 0.4s ease; text-transform: uppercase; letter-spacing: 2px;
+            box-shadow: 0 25px 50px rgba(59,130,246,0.4);
+        }
+        .btn-enregistrer:hover { 
+            transform: translateY(-8px); box-shadow: 0 35px 70px rgba(59,130,246,0.6);
+        }
+        .btn-enregistrer:active { transform: translateY(-3px); }
+
+        /* Tableau Locations */
+        .table-container { 
+            background: rgba(255,255,255,0.15); border-radius: 25px; padding: 40px; overflow-x: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2); backdrop-filter: blur(20px);
+        }
+        .table-title { color: white; margin-bottom: 30px; font-size: 2em; font-weight: 800; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.95em; color: white; }
+        th { 
+            background: linear-gradient(135deg, #3b82f6, #1d4ed8); color: white; 
+            padding: 20px 15px; text-align: left; font-weight: 700;
+        }
+        td { padding: 18px 15px; border-bottom: 2px solid rgba(255,255,255,0.1); }
+        tr:hover { background: rgba(255,255,255,0.1); }
+        .montant-total { color: #10b981; font-weight: 800; font-size: 1.3em; }
+
+        /* Messagerie */
+        .messagerie-location { 
+            background: rgba(255,255,255,0.1); border-radius: 20px; padding: 25px; margin-top: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); backdrop-filter: blur(20px);
+        }
+
+        @media (max-width: 768px) {
+            .form-grid { grid-template-columns: 1fr; gap: 20px; }
+            .header-stats { flex-direction: column; gap: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header + Stats -->
+        <div class="header">
+            <h1><i class="fas fa-car-side"></i> Location Voiture</h1>
+            <div class="header-stats">
+                <div class="stat-item">
+                    <strong id="total-locations">{{ locations|length|default(0) }}</strong> locations actives
+                </div>
+                <div class="stat-item">
+                    <strong id="total-recu-location">{{ "%.0f"|format(locations|sum(attribute='montant')|default(0)) }}</strong> FCFA encaissés
+                </div>
+            </div>
+            
+            <!-- Navigation -->
+            <div class="nav-quick">
+                <a href="/" class="nav-btn"><i class="fas fa-home mr-2"></i>Accueil Client</a>
+                <a href="/bureau" class="nav-btn"><i class="fas fa-tachometer-alt mr-2"></i>Bureau</a>
+                <a href="/finance" class="nav-btn"><i class="fas fa-coins mr-2"></i>Finances</a>
+                <a href="/logout" class="nav-btn bg-red-600 hover:bg-red-500"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+            </div>
+        </div>
+
+        <!-- Formulaire Nouvelle Location (CALCULS AUTO) -->
+        <div class="form-section">
+            <h2 class="form-title">🚗 Nouvelle Location</h2>
+            <form action="/enregistrer_location" method="POST" id="form-location">
+                <div class="form-grid">
+                    <!-- Client -->
+                    <div>
+                        <label>👤 Nom Client <span style="color:#ef4444;">*</span></label>
+                        <input type="text" name="nom_client" placeholder="M. Dupont Jean" required>
+                    </div>
+                    <div>
+                        <label>📱 Téléphone/WhatsApp <span style="color:#ef4444;">*</span></label>
+                        <input type="tel" name="tel" placeholder="243 81x xxx xxx" required>
+                    </div>
+                    <div>
+                        <label>📍 Adresse <span style="color:#ef4444;">*</span></label>
+                        <textarea name="adresse" rows="2" placeholder="Gombe, Immeuble X..." required></textarea>
+                    </div>
+                    
+                    <!-- Voiture -->
+                    <div>
+                        <label>🚙 Voiture Choisi <span style="color:#ef4444;">*</span></label>
+                        <select name="voiture" id="voiture-select" required>
+                            <option value="">Sélectionner...</option>
+                            <option value="Toyota Corolla">Toyota Corolla (50k/jour)</option>
+                            <option value="Hyundai Tucson">Hyundai Tucson SUV (80k/jour)</option>
+                            <option value="Mercedes C200">Mercedes C200 Premium (120k/jour)</option>
+                            <option value="Range Rover">Range Rover VIP (250k/jour)</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>💰 Prix/Jour (FCFA) <span style="color:#ef4444;">*</span></label>
+                        <input type="number" name="prix_jour" id="prix_jour" step="5000" min="30000" placeholder="50000" required onchange="calculerMontant()">
+                    </div>
+                    <div>
+                        <label>📅 Nb Jours <span style="color:#ef4444;">*</span></label>
+                        <input type="number" name="nb_jours" id="nb_jours" min="1" max="30" placeholder="5" required onchange="calculerMontant()">
+                    </div>
+                    <div>
+                        <label>📅 Date Début <span style="color:#ef4444;">*</span></label>
+                        <input type="date" name="date_debut" id="date_debut" required onchange="calculerDateFin()">
+                    </div>
+                </div>
+                
+                <!-- CALCULS AUTOMATIQUES -->
+                <div class="calcul-auto">
+                    <div>Montant Total: <span id="montant-total" class="champ-calcul">0 FCFA</span></div>
+                    <div>Date Fin Auto: <span id="date-fin-auto" class="champ-calcul">--</span></div>
+                    <p class="text-sm mt-2 opacity-90">✅ Recette automatiquement ajoutée en Finance</p>
+                </div>
+                
+                <button type="submit" class="btn-enregistrer">
+                    <i class="fas fa-car mr-3"></i> 🚀 ENREGISTRER LOCATION + FINANCE
+                </button>
+            </form>
+        </div>
+
+        <!-- Historique Locations -->
+        <div class="table-container">
+            <h2 class="table-title">📋 Historique Locations ({{ locations|length }})</h2>
+            {% if locations %}
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Client</th>
+                        <th>Voiture</th>
+                        <th>Jours</th>
+                        <th>Montant</th>
+                        <th>Début → Fin</th>
+                        <th>Tél</th>
+                        <th>Status</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for loc in locations %}
+                    <tr>
+                        <td><strong>#{{ loc.id }}</strong></td>
+                        <td>{{ loc.nom_client }}</td>
+                        <td><span class="font-bold">{{ loc.voiture }}</span></td>
+                        <td>{{ loc.nb_jours }} j</td>
+                        <td class="montant-total">{{ "%.0f"|format(loc.montant) }} FCFA</td>
+                        <td>{{ loc.date_debut.strftime('%d/%m') }} → {{ loc.date_fin.strftime('%d/%m') }}</td>
+                        <td><a href="https://wa.me/{{ loc.tel }}" class="text-blue-400 hover:text-blue-300" target="_blank">{{ loc.tel }}</a></td>
+                        <td>
+                            {% if loc.date_fin > (now_date|default(datetime.now().date())) %}
+                                <span class="status-paye">✅ En cours</span>
+                            {% else %}
+                                <span class="status-attente">✅ Terminée</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td colspan="4"><strong>TOTAL GÉNÉRAL</strong></td>
+                        <td class="montant-total font-black text-2xl">{{ "%.0f"|format(locations|sum(attribute='montant')|default(0)) }} FCFA</td>
+                        <td colspan="3"></td>
+                    </tr>
+                </tfoot>
+            </table>
+            {% else %}
+            <div style="text-align: center; padding: 100px; color: rgba(255,255,255,0.7);">
+                <i class="fas fa-car" style="font-size: 8em;"></i>
+                <h2>Aucune location enregistrée</h2>
+                <p>Ajoutez votre première location ci-dessus !</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Messagerie Location -->
+        <div class="messagerie-location">
+            <h3 style="color: white; margin-bottom: 20px;"><i class="fas fa-comments mr-3"></i>Messagerie Location</h3>
+            <div id="messages-location" style="max-height: 200px; overflow-y: auto; margin-bottom: 20px;"></div>
+            <div style="display: flex; gap: 15px;">
+                <input type="text" id="msg-location" placeholder="Message vers Direction/Finance..." 
+                       style="flex: 1; padding: 15px; border-radius: 20px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                <button onclick="envoyerMsgLocation()" style="padding: 15px 25px; background: #3b82f6; color: white; border: none; border-radius: 20px; font-weight: 700; cursor: pointer;">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // CALCULS AUTOMATIQUES
+        function calculerMontant() {
+            const prixJour = parseFloat(document.getElementById('prix_jour').value) || 0;
+            const nbJours = parseInt(document.getElementById('nb_jours').value) || 0;
+            const total = prixJour * nbJours;
+            document.getElementById('montant-total').textContent = total.toLocaleString() + ' FCFA';
+        }
+
+        function calculerDateFin() {
+            const dateDebut = document.getElementById('date_debut').value;
+            const nbJours = parseInt(document.getElementById('nb_jours').value) || 0;
+            if (dateDebut && nbJours > 0) {
+                const dateDebutObj = new Date(dateDebut);
+                const dateFinObj = new Date(dateDebutObj.getTime() + (nbJours * 24 * 60 * 60 * 1000));
+                document.getElementById('date-fin-auto').textContent = 
+                    dateFinObj.toLocaleDateString('fr-FR', { day: '2-digit', month: '2-digit', year: 'numeric' });
+            }
+        }
+
+        // Messagerie
+        async function chargerMessagesLocation() {
+            try {
+                const res = await fetch('/get_messages');
+                const messages = await res.json();
+                document.getElementById('messages-location').innerHTML = 
+                    messages.map(m => `<div><strong>${m.origine}:</strong> ${m.contenu}</div>`).join('');
+            } catch(e) {}
+        }
+
+        async function envoyerMsgLocation() {
+            const contenu = document.getElementById('msg-location').value.trim();
+            if (!contenu) return;
+            await fetch('/send_message', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({service_dest: 'direction', contenu: 'Location: ' + contenu})
+            });
+            document.getElementById('msg-location').value = '';
+            chargerMessagesLocation();
+        }
+
+        // Init
+        document.getElementById('voiture-select').onchange = function() {
+            const prix = this.value.includes('Corolla') ? 50000 : 
+                        this.value.includes('Tucson') ? 80000 :
+                        this.value.includes('Mercedes') ? 120000 : 250000;
+            document.getElementById('prix_jour').value = prix;
+            calculerMontant();
+        };
+        
+        chargerMessagesLocation();
+        setInterval(chargerMessagesLocation, 5000);
+    </script>
+
+    {% if now_date is not defined %}
+    {% set now_date = "2026-04-14" %}
+    {% endif %}
+</body>
+</html>

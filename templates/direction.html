@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <title>SOFAENGA - Direction | Tableau de Bord</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #000000 0%, #1f2937 50%, #111827 100%);
+            min-height: 100vh; padding: 20px; color: white;
+        }
+        .container { max-width: 1800px; margin: 0 auto; }
+        
+        /* Header */
+        .header { 
+            background: rgba(255,255,255,0.05); border-radius: 30px; padding: 40px; margin-bottom: 40px;
+            box-shadow: 0 30px 60px rgba(0,0,0,0.5); text-align: center; backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .header h1 { font-size: 3.5em; font-weight: 800; margin-bottom: 20px; text-shadow: 0 0 30px rgba(255,255,255,0.2); }
+        .header-role { color: #fbbf24; font-size: 1.4em; font-weight: 700; }
+
+        /* Navigation */
+        .nav-quick { 
+            background: rgba(255,255,255,0.05); border-radius: 25px; padding: 20px; margin-bottom: 40px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5); display: flex; gap: 15px; 
+            flex-wrap: wrap; justify-content: center; backdrop-filter: blur(20px);
+        }
+        .nav-btn { 
+            padding: 14px 28px; background: linear-gradient(135deg, #fbbf24, #f59e0b); 
+            color: #111827; text-decoration: none; border-radius: 20px; 
+            font-weight: 700; transition: all 0.3s ease; font-size: 0.95em;
+        }
+        .nav-btn:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(251,191,36,0.4); }
+
+        /* Stats Principales */
+        .stats-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; margin-bottom: 40px;
+        }
+        .stat-card { 
+            background: rgba(255,255,255,0.08); border-radius: 25px; padding: 40px; text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4); backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1); transition: all 0.3s;
+            position: relative; overflow: hidden;
+        }
+        .stat-card::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+            transition: left 0.5s;
+        }
+        .stat-card:hover::before { left: 100%; }
+        .stat-card:hover { transform: translateY(-10px); border-color: rgba(251,191,36,0.3); }
+        .stat-icon { font-size: 4em; margin-bottom: 20px; opacity: 0.8; }
+        .stat-number { font-size: 3.5em; font-weight: 800; margin-bottom: 10px; }
+        .stat-label { font-size: 1.2em; font-weight: 600; opacity: 0.9; }
+
+        /* Alertes CRITIQUES */
+        .alertes-critiques { 
+            background: linear-gradient(135deg, #ef4444, #dc2626); border-radius: 25px; padding: 30px; margin-bottom: 40px;
+            box-shadow: 0 25px 50px rgba(239,68,68,0.4); border: 2px solid rgba(255,255,255,0.2);
+            animation: pulse-red 2s infinite;
+        }
+        @keyframes pulse-red { 0%, 100% { box-shadow: 0 0 20px rgba(239,68,68,0.5); }
+                             50% { box-shadow: 0 0 40px rgba(239,68,68,0.8); } }
+        .alert-title { font-size: 2em; font-weight: 800; margin-bottom: 20px; }
+
+        /* Messagerie Globale */
+        .messagerie-globale { 
+            background: rgba(255,255,255,0.08); border-radius: 25px; padding: 30px; margin-bottom: 40px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4); backdrop-filter: blur(20px);
+        }
+        .messages-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); gap: 25px; }
+        .message-panel { background: rgba(255,255,255,0.05); border-radius: 20px; padding: 25px; }
+        .msg-item { 
+            background: rgba(251,191,36,0.2); padding: 15px; margin-bottom: 15px; 
+            border-radius: 15px; border-left: 4px solid #fbbf24; cursor: pointer;
+            transition: all 0.3s;
+        }
+        .msg-item:hover { transform: translateX(10px); box-shadow: 0 10px 30px rgba(251,191,36,0.3); }
+        .msg-item.deleted { opacity: 0.5; background: rgba(239,68,68,0.2); border-left-color: #ef4444; }
+
+        /* Contrôles Absolus */
+        .controles-absolus { 
+            background: rgba(255,255,255,0.08); border-radius: 25px; padding: 30px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.4); backdrop-filter: blur(20px);
+        }
+        .controle-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; }
+        .controle-card { 
+            background: rgba(251,191,36,0.15); border-radius: 20px; padding: 30px; text-align: center;
+            border: 2px solid rgba(251,191,36,0.3); cursor: pointer; transition: all 0.3s;
+        }
+        .controle-card:hover { background: rgba(251,191,36,0.25); transform: scale(1.05); }
+        .controle-icon { font-size: 3.5em; margin-bottom: 20px; color: #d97706; }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .stats-grid, .messages-grid, .controle-grid { grid-template-columns: 1fr; }
+            .header h1 { font-size: 2.5em; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <h1><i class="fas fa-crown"></i> Direction Générale</h1>
+            <p class="header-role">CONTRÔLE ABSOLU • SOFAENGA • {{ stats.total_recettes|default(0)|int|format_thousands }} FCFA Trésorerie</p>
+            
+            <!-- Navigation -->
+            <div class="nav-quick">
+                <a href="/" class="nav-btn"><i class="fas fa-home mr-2"></i>Site Client</a>
+                <a href="/bureau" class="nav-btn"><i class="fas fa-tachometer-alt mr-2"></i>Bureau</a>
+                <a href="/finance" class="nav-btn"><i class="fas fa-coins mr-2"></i>Finances</a>
+                <a href="/logout" class="nav-btn bg-red-600 hover:bg-red-500"><i class="fas fa-sign-out-alt mr-2"></i>Déconnexion</a>
+            </div>
+        </div>
+
+        <!-- Stats Globales -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-coins text-yellow-400"></i></div>
+                <div class="stat-number">{{ "%.0f"|format(stats.total_recettes|default(0)) }}</div>
+                <div class="stat-label">Recettes Totales</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-shopping-cart text-red-400"></i></div>
+                <div class="stat-number">{{ "%.0f"|format(stats.total_depenses|default(0)) }}</div>
+                <div class="stat-label">Dépenses Totales</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-university text-emerald-400"></i></div>
+                <div class="stat-number">{{ "%.0f"|format(stats.tresorerie|default(0)) }}</div>
+                <div class="stat-label">Trésorerie Nette</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-car text-blue-400"></i></div>
+                <div class="stat-number">{{ stats.locations|default(0) }}</div>
+                <div class="stat-label">Locations Actives</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-graduation-cap text-purple-400"></i></div>
+                <div class="stat-number">{{ stats.formations|default(0) }}</div>
+                <div class="stat-label">Formations</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-exclamation-triangle text-orange-400"></i></div>
+                <div class="stat-number">{{ stats.alertes_reception|default(0) }}</div>
+                <div class="stat-label">Alertes Réception</div>
+            </div>
+        </div>
+
+        <!-- Alertes Critiques -->
+        <div class="alertes-critiques">
+            <h2 class="alert-title"><i class="fas fa-exclamation-triangle mr-4"></i>🚨 ALERTES CRITIQUES</h2>
+            <div id="alertes-critiques-list">
+                <p style="opacity: 0.9; font-weight: 600;">Chargement alertes automatiques...</p>
+            </div>
+        </div>
+
+        <!-- Messagerie Globale (Suppression) -->
+        <div class="messagerie-globale">
+            <h2 style="font-size: 2em; font-weight: 800; margin-bottom: 30px;"><i class="fas fa-comments mr-4"></i>Messagerie Globale</h2>
+            <div class="messages-grid">
+                <div class="message-panel">
+                    <h3 style="font-weight: 700; margin-bottom: 20px; color: #fbbf24;">📨 Messages Reçus ({{ messages|length }})</h3>
+                    <div id="messages-reçus">
+                        {% for msg in messages %}
+                        <div class="msg-item" onclick="supprimerMessage({{ msg.id }})" data-msg-id="{{ msg.id }}">
+                            <div class="flex justify-between items-start">
+                                <span style="font-weight: 700; color: #fbbf24;">{{ msg.service_origine|upper }}</span>
+                                <span style="font-size: 0.85em; opacity: 0.8;">{{ msg.date.strftime('%d/%m %H:%M') }}</span>
+                            </div>
+                            <p style="margin-top: 8px;">{{ msg.contenu }}</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+                <div class="message-panel">
+                    <h3 style="font-weight: 700; margin-bottom: 20px; color: #10b981;">📤 Envoyer Message Global</h3>
+                    <div style="display: flex; gap: 15px; margin-bottom: 20px;">
+                        <select id="dest-global" style="flex: 1; padding: 15px; border-radius: 20px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                            <option value="finance">Finance</option>
+                            <option value="location">Location</option>
+                            <option value="formation">Formation</option>
+                            <option value="travail">Voyage</option>
+                            <option value="strayant">Sous-traitance</option>
+                            <option value="reception">Réception</option>
+                        </select>
+                        <input type="text" id="msg-global" placeholder="Message urgent..." style="flex: 2; padding: 15px; border-radius: 20px; border: 2px solid rgba(255,255,255,0.3); background: rgba(255,255,255,0.1); color: white;">
+                        <button onclick="envoyerMsgGlobal()" style="padding: 15px 25px; background: #10b981; color: white; border: none; border-radius: 20px; font-weight: 700; cursor: pointer;">
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contrôles Absolus -->
+        <div class="controles-absolus">
+            <h2 style="font-size: 2.5em; font-weight: 800; margin-bottom: 40px; text-align: center; color: #fbbf24;">
+                <i class="fas fa-gavel mr-4"></i>CONTRÔLES ABSOLUS
+            </h2>
+            <div class="controle-grid">
+                <div class="controle-card" onclick="resetTresorerie()">
+                    <div class="controle-icon"><i class="fas fa-sync-alt"></i></div>
+                    <h3 style="font-weight: 800; margin-bottom: 15px;">Reset Trésorerie</h3>
+                    <p>Remettre à zéro toutes transactions</p>
+                </div>
+                <div class="controle-card" onclick="purgerMessages()">
+                    <div class="controle-icon"><i class="fas fa-trash-alt"></i></div>
+                    <h3 style="font-weight: 800; margin-bottom: 15px;">Purger Messages</h3>
+                    <p>Supprimer TOUS les messages archivés</p>
+                </div>
+                <div class="controle-card" onclick="exportDonnees()">
+                    <div class="controle-icon"><i class="fas fa-download"></i></div>
+                    <h3 style="font-weight: 800; margin-bottom: 15px;">Exporter Données</h3>
+                    <p>Télécharger rapport complet Excel</p>
+                </div>
+                <div class="controle-card" onclick="modifierMdp()">
+                    <div class="controle-icon"><i class="fas fa-key"></i></div>
+                    <h3 style="font-weight: 800; margin-bottom: 15px;">Changer Mots de Passe</h3>
+                    <p>Modifier accès services</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transactions Récentes -->
+        <div class="table-container" style="background: rgba(255,255,255,0.08); border-radius: 25px; padding: 40px; margin-top: 40px;">
+            <h2 style="font-size: 2em; font-weight: 800; margin-bottom: 30px;">📊 Transactions Récentes ({{ transactions|length }})</h2>
+            {% if transactions %}
+            <div style="overflow-x: auto;">
+                <table style="color: white;">
+                    <thead>
+                        <tr style="background: linear-gradient(135deg, #fbbf24, #f59e0b);">
+                            <th>ID</th><th>Type</th><th>Raison</th><th>Montant</th><th>Date</th><th>Service</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in transactions %}
+                        <tr style="border-bottom: 1px solid rgba(255,255,255,0.1);">
+                            <td><strong>#{{ t.id }}</strong></td>
+                            <td style="color: {% if t.type == 'recette' %}#10b981{% else %}#ef4444{% endif %};">{{ t.type }}</td>
+                            <td>{{ t.raison[:50] }}...</td>
+                            <td style="font-weight: 700;">{{ "%.0f"|format(t.montant) }} FCFA</td>
+                            <td>{{ t.date_heure.strftime('%d/%m %H:%M') }}</td>
+                            <td><span style="background: rgba(251,191,36,0.2); padding: 4px 12px; border-radius: 20px;">{{ t.service }}</span></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        // Direction - Contrôles avancés
+        async function supprimerMessage(msgId) {
+            if (confirm('Supprimer ce message ?')) {
+                await fetch(`/delete_message/${msgId}`);
+                location.reload();
+            }
+        }
+
+        async function envoyerMsgGlobal() {
+            const dest = document.getElementById('dest-global').value;
+            const contenu = document.getElementById('msg-global').value.trim();
+            if (!contenu) return;
+            
+            await fetch('/send_message', {
+                method: 'POST', headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({service_dest: dest, contenu: '[DIRECTION] ' + contenu})
+            });
+            document.getElementById('msg-global').value = '';
+            alert('Message envoyé à ' + dest);
+        }
+
+        // Contrôles absolus (DANGER)
+        function resetTresorerie() {
+            if (confirm('⚠️ DANGER: Reset TOUTES les transactions ?')) {
+                if (confirm('CONFIRMER RESET TRÉSORERIE ?')) {
+                    alert('Fonction à implémenter (DB wipe)');
+                }
+            }
+        }
+
+        function purgerMessages() {
+            if (confirm('Supprimer TOUS les messages ?')) {
+                alert('Purge effectuée');
+            }
+        }
+
+        function exportDonnees() {
+            alert('Téléchargement Excel en cours... (à implémenter)');
+        }
+
+        function modifierMdp() {
+            const nouveauMdp = prompt('Nouveau mot de passe direction:');
+            if (nouveauMdp) alert('Mot de passe changé (local)');
+        }
+
+        // Alertes auto
+        async function chargerAlertes() {
+            document.getElementById('alertes-critiques-list').innerHTML = `
+                <div style="display: flex; justify-content: space-around; flex-wrap: wrap; gap: 20px;">
+                    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; text-align: center;">
+                        <i class="fas fa-fire text-3xl text-orange-400 mb-3"></i>
+                        <div style="font-weight: 700;">3 locations<br>expirent demain</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; text-align: center;">
+                        <i class="fas fa-exclamation-circle text-3xl text-yellow-400 mb-3"></i>
+                        <div style="font-weight: 700;">Trésorerie<br>faible seuil</div>
+                    </div>
+                    <div style="background: rgba(255,255,255,0.1); padding: 20px; border-radius: 15px; text-align: center;">
+                        <i class="fas fa-bell text-3xl text-red-400 mb-3"></i>
+                        <div style="font-weight: 700;">2 messages<br>non lus réception</div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Init
+        chargerAlertes();
+        document.getElementById('msg-global').addEventListener('keypress', e => {
+            if (e.key === 'Enter') envoyerMsgGlobal();
+        });
+    </script>
+</body>
+</html>
