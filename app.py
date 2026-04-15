@@ -17,9 +17,6 @@ else:
 
 db = SQLAlchemy(app)
 
-# ==========================================
-# MODÈLES DB (IDENTIQUES - OK)
-# ==========================================
 class Transaction(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     type = db.Column(db.String(50))  # recette, depense
@@ -103,11 +100,7 @@ MOTS_DE_PASSE = {
     'direction': 'PAPA1'
 }
 
-# ==========================================
-# ROUTES CORRIGÉES (PROBLÈME RÉSOLU)
-# ==========================================
 
-# 1. VITRINE PUBLIQUE
 @app.route('/')
 def index():
     offres = OffreEmploi.query.all()
@@ -157,11 +150,6 @@ def logout():
     session.clear()
     flash('Déconnecté avec succès', 'info')
     return redirect(url_for('index'))
-
-# ==========================================
-# SERVICES (toutes protections corrigées)
-# ==========================================
-
 @app.route('/finance')
 def finance():
     if session.get('service') != 'finance':
@@ -301,19 +289,22 @@ def get_messages():
     messages = MessageInterService.query.filter_by(service_dest=session['service'], deleted=False).order_by(MessageInterService.date.desc()).all()
     return jsonify([{'origine': m.service_origine, 'contenu': m.contenu, 'date': m.date.strftime('%d/%m %H:%M')} for m in messages])
 
-# ==========================================
-# CRÉATION DB + LANCEMENT
-# ==========================================
+# 1. Cette partie doit être "libre" (pas cachée dans le if name)
+with app.app_context():
+    db.create_all()
+    if OffreEmploi.query.count() == 0:
+        offre1 = OffreEmploi(
+            num='SOF-001', 
+            titre_poste='Chauffeur VIP', 
+            nb_postes=3,
+            description='Location voitures avec chauffeur', 
+            date_fin=datetime(2026, 5, 15).date(),
+            exigences='Permis B, 5 ans expérience'
+        )
+        db.session.add(offre1)
+        db.session.commit()
+
+# 2. Ce bloc ne sert que pour ton PC local
 if __name__ == '__main__':
-    with app.app_context():
-        db.create_all()  # ✅ DB AUTO-CRÉÉE
-        # Offres exemple
-        if OffreEmploi.query.count() == 0:
-            offre1 = OffreEmploi(num='SOF-001', titre_poste='Chauffeur VIP', nb_postes=3,
-                               description='Location voitures avec chauffeur', date_fin=datetime(2026, 5, 15).date(),
-                               exigences='Permis B, 5 ans expérience')
-            db.session.add(offre1)
-            db.session.commit()
-    
     port = int(os.environ.get('PORT', 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(host='0.0.0.0', port=port)
