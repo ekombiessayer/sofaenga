@@ -29,9 +29,6 @@ keepalive = 5
 # Preload
 preload_app = True
 
-# User/Group (Render)
-user = "www-data"
-group = "www-data"
 
 # PID
 pidfile = "/tmp/gunicorn.pid"
