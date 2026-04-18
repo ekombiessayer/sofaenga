@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <title>SOFAENGA - Gestion Financière</title>
+    <title>King-Solutions - Gestion Financière</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -141,8 +141,8 @@
     <div class="container">
         <!-- Header + Navigation -->
         <div class="header">
-            <h1><i class="fas fa-coins"></i> Finances SOFAENGA</h1>
-            <p>Trésorerie Générale: <strong id="tresorerie">{{ "%.0f"|format(tresorerie) }} FCFA</strong> 
+            <h1><i class="fas fa-coins"></i> Finances King-Solutions</h1>
+            <p>Trésorerie Générale: <strong id="tresorerie">{{ "%.0f"|format(tresorerie) }} usd</strong> 
                | Période: <span class="stat-periode">{{ periode|default('Toutes') }}</span></p>
             
             <!-- Navigation rapide -->
@@ -176,17 +176,17 @@
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-arrow-up text-emerald-400"></i></div>
                 <div class="stat-number">{{ "%.0f"|format(recettes) }}</div>
-                <div class="stat-label">Recettes Totales (FCFA)</div>
+                <div class="stat-label">Recettes Totales (usd)</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-arrow-down text-red-400"></i></div>
                 <div class="stat-number">{{ "%.0f"|format(depenses) }}</div>
-                <div class="stat-label">Dépenses Totales (FCFA)</div>
+                <div class="stat-label">Dépenses Totales (usd)</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-balance-scale text-yellow-400"></i></div>
                 <div class="stat-number">{{ "%.0f"|format(tresorerie) }}</div>
-                <div class="stat-label">Trésorerie Nette (FCFA)</div>
+                <div class="stat-label">Trésorerie Nette (usd)</div>
             </div>
             <div class="stat-card">
                 <div class="stat-icon"><i class="fas fa-chart-pie text-blue-400"></i></div>
@@ -218,7 +218,7 @@
                         <input type="text" name="raison" placeholder="Ex: Location bureau, Fournitures..." required>
                     </div>
                     <div>
-                        <label>💵 Montant (FCFA) <span style="color:#f44336;">*</span></label>
+                        <label>💵 Montant (usd) <span style="color:#f44336;">*</span></label>
                         <input type="number" name="montant" step="1000" min="1000" placeholder="50000" required>
                     </div>
                     <div>
@@ -264,7 +264,7 @@
                             </td>
                             <td>{{ t.raison }}</td>
                             <td class="{{ t.type }}">
-                                {{ "%.0f"|format(t.montant) }} FCFA
+                                {{ "%.0f"|format(t.montant) }} usd
                             </td>
                             <td>{{ t.date_heure.strftime('%d/%m/%Y %H:%M') }}</td>
                             <td class="actions">

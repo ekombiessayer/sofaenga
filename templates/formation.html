@@ -125,7 +125,7 @@
                     <strong id="total-formations">{{ formations|length|default(0) }}</strong> inscriptions
                 </div>
                 <div class="stat-item">
-                    <strong id="total-recu-formation">{{ "%.0f"|format(formations|sum(attribute='montant')|default(0)) }}</strong> FCFA encaissés
+                    <strong id="total-recu-formation">{{ "%.0f"|format(formations|sum(attribute='montant')|default(0)) }}</strong> usd encaissés
                 </div>
             </div>
             
@@ -166,7 +166,7 @@
                         </select>
                     </div>
                     <div>
-                        <label>💰 Tarif Formation (FCFA) <span style="color:#ef4444;">*</span></label>
+                        <label>💰 Tarif Formation (usd) <span style="color:#ef4444;">*</span></label>
                         <input type="number" name="montant" id="montant-formation" step="5000" min="50000" placeholder="150000" required>
                     </div>
                     <div>
@@ -215,7 +215,7 @@
                         <td>{{ form.nom }}</td>
                         <td><span class="font-bold">{{ form.formation_type }}</span></td>
                         <td>{{ form.nb_seances }} s</td>
-                        <td class="montant-total">{{ "%.0f"|format(form.montant) }} FCFA</td>
+                        <td class="montant-total">{{ "%.0f"|format(form.montant) }} usd</td>
                         <td>{{ form.date_formation.strftime('%d/%m') }} → {{ form.date_fin.strftime('%d/%m') }}</td>
                         <td><a href="https://wa.me/{{ form.tel }}" class="text-blue-400 hover:text-blue-300" target="_blank">{{ form.tel }}</a></td>
                         <td>
@@ -231,7 +231,7 @@
                 <tfoot>
                     <tr>
                         <td colspan="4"><strong>TOTAL GÉNÉRAL</strong></td>
-                        <td class="montant-total font-black text-2xl">{{ "%.0f"|format(formations|sum(attribute='montant')|default(0)) }} FCFA</td>
+                        <td class="montant-total font-black text-2xl">{{ "%.0f"|format(formations|sum(attribute='montant')|default(0)) }} usd</td>
                         <td colspan="3"></td>
                     </tr>
                 </tfoot>

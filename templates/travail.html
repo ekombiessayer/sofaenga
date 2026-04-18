@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <title>SOFAENGA - Assistance Voyage</title>
+    <title>King-Solutions - Assistance Voyage</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
@@ -74,7 +74,7 @@
                     </div>
                     <div class="form-group">
                         <label class="form-label">💰 Montant Accompté</label>
-                        <input type="number" name="montant" class="form-input" step="5000" min="0" placeholder="50000 FCFA">
+                        <input type="number" name="montant" class="form-input" step="5000" min="0" placeholder="50000 usd">
                     </div>
                     <div class="form-group">
                         <label class="form-label">📝 Notes/Urgence</label>
@@ -118,7 +118,7 @@
                         <td style="font-weight: 600;">{{ v.nom_client }}</td>
                         <td><span style="background: rgba(59,130,246,0.2); padding: 4px 12px; border-radius: 20px;">{{ v.destination }}</span></td>
                         <td>{{ v.type_document }}</td>
-                        <td style="color: #10b981; font-weight: 700;">{{ "%.0f"|format(v.montant|default(0)) }} FCFA</td>
+                        <td style="color: #10b981; font-weight: 700;">{{ "%.0f"|format(v.montant|default(0)) }} usd</td>
                         <td>
                             <span class="status-active">✅ Actif</span>
                         </td>
@@ -135,7 +135,7 @@
                     <tr>
                         <td colspan="4"><strong>TOTAL ACCOMPTES</strong></td>
                         <td style="color: #10b981; font-size: 1.5em; font-weight: 800;">
-                            {{ "%.0f"|format(voyages|sum(attribute='montant')|default(0)) }} FCFA
+                            {{ "%.0f"|format(voyages|sum(attribute='montant')|default(0)) }} usd
                         </td>
                         <td colspan="3"></td>
                     </tr>
