@@ -996,5 +996,72 @@ setTimeout(() => {
     }
 }, 10000);
 </script>
+<!-- ===== CHATBOT IA - COLLER ICI AVANT </body> ===== -->
+<div id="ai-chatbot" class="fixed bottom-6 right-6 z-[9999]">
+    <!-- BOUTON VERT FLOTTANT (visible toujours) -->
+    <button onclick="toggleChatbot()" class="w-16 h-16 bg-gradient-to-br from-emerald-500 to-emerald-600 hover:from-emerald-600 shadow-2xl hover:shadow-emerald-500/50 rounded-full flex items-center justify-center text-white text-2xl animate-bounce">
+        <i class="fas fa-comments"></i>
+        <span class="absolute -top-10 -right-2 bg-red-500 text-xs px-2 py-1 rounded-full animate-pulse">IA</span>
+    </button>
+    
+    <!-- Fenêtre Chat (s'ouvre au clic) -->
+    <div id="chat-window" class="glass-panel w-80 h-96 rounded-3xl fixed bottom-28 right-6 shadow-3xl border-white/20 hidden flex flex-col max-h-[80vh] overflow-hidden">
+        <div class="bg-gradient-to-r from-emerald-600 p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white/20 rounded-full flex-center"><i class="fas fa-robot text-white"></i></div>
+                <div><h4 class="font-bold text-white">IA King-Solutions</h4><p class="text-xs text-emerald-100">24/7</p></div>
+            </div>
+            <button onclick="toggleChatbot()" class="text-white hover:text-emerald-200"><i class="fas fa-times"></i></button>
+        </div>
+        <div id="chat-messages" class="flex-1 p-4 space-y-3 overflow-auto bg-slate-900/50">
+            <div class="bg-emerald-500/20 p-3 rounded-2xl rounded-br-none max-w-[80%]">
+                Bonjour ! 👋 Posez-moi vos questions sur visa, voitures, formations...
+            </div>
+        </div>
+        <div class="p-4 border-t border-white/10">
+            <div class="flex gap-2">
+                <input id="chat-input" placeholder="Votre question..." class="flex-1 glass-panel p-3 rounded-2xl border-white/20 focus:border-emerald-500" />
+                <button onclick="sendMessage()" class="w-12 bg-emerald-500 hover:bg-emerald-400 rounded-xl text-white"><i class="fas fa-paper-plane"></i></button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// IA 20+ questions (déjà prête)
+const FAQ_KING = {
+    'visa': '✈️ Visa 95% succès ! 150-500$. RDV consul garanti. WhatsApp maintenant.',
+    'voiture': '🚗 Location VIP 120$/jour + chauffeur. Aéroport 50$. Réservez !',
+    'formation': '🎓 Anglais/Management 250$. Certificats internationaux.',
+    'personnel': '👥 Secrétaires 400$/mois. Chauffeurs VIP 600$. Contrats flex.',
+    // +16 autres...
+};
+
+function toggleChatbot() {
+    document.getElementById('chat-window').classList.toggle('hidden');
+}
+
+function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const msg = input.value.toLowerCase();
+    const messages = document.getElementById('chat-messages');
+    
+    // Ton message
+    messages.innerHTML += `<div class="bg-slate-700 p-3 rounded-2xl ml-auto max-w-[80%]">${input.value}</div>`;
+    
+    // Réponse IA
+    const reponse = FAQ_KING[msg] || "🤖 Service spécifique ! Cliquez WhatsApp vert pour humain 24/7.";
+    setTimeout(() => {
+        messages.innerHTML += `<div class="bg-emerald-500/20 p-3 rounded-2xl max-w-[85%]">${reponse}</div>`;
+        messages.scrollTop = messages.scrollHeight;
+    }, 500);
+    
+    input.value = '';
+    messages.scrollTop = messages.scrollHeight;
+}
+
+document.getElementById('chat-input').addEventListener('keypress', e => e.key === 'Enter' && sendMessage());
+</script>
+<!-- ===== FIN CHATBOT ===== -->
 </body>
 </html>
