@@ -804,5 +804,197 @@ Cordialement,`;
     <!-- Favicon PWA -->
     <link rel="icon" type="image/png" sizes="32x32" href="https://ui-avatars.com/api/?name=KS&background=10b981&color=fff&size=32">
     <link rel="icon" type="image/png" sizes="16x16" href="https://ui-avatars.com/api/?name=KS&background=10b981&color=fff&size=16">
+    <!-- Chatbot IA King-Solutions - Ajoute AVANT </body> -->
+<div id="ai-chatbot" class="fixed bottom-6 right-6 lg:bottom-8 lg:right-8 z-[9999] hidden">
+    <!-- Chat Window -->
+    <div id="chat-window" class="glass-panel w-80 lg:w-96 h-96 lg:h-[500px] rounded-3xl flex flex-col shadow-3xl border-white/20 overflow-hidden backdrop-blur-xl hidden">
+        <!-- Header -->
+        <div class="bg-gradient-to-r from-emerald-600 to-emerald-500 p-4 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 bg-white/20 rounded-2xl flex items-center justify-center">
+                    <i class="fas fa-robot text-white text-xl"></i>
+                </div>
+                <div>
+                    <h4 class="font-black text-white text-lg">IA King-Solutions</h4>
+                    <p class="text-emerald-100 text-xs font-bold">Réponse instantanée</p>
+                </div>
+            </div>
+            <button onclick="toggleChatbot()" class="text-white hover:text-emerald-200 transition">
+                <i class="fas fa-times"></i>
+            </button>
+        </div>
+        
+        <!-- Messages -->
+        <div id="chat-messages" class="flex-1 p-4 lg:p-6 overflow-y-auto space-y-4 scrollbar-thin scrollbar-thumb-slate-600 scrollbar-track-slate-900">
+            <div class="bg-emerald-500/20 p-4 rounded-2xl rounded-br-sm max-w-[80%] text-sm">
+                Bonjour ! 👋 Je suis l'IA de King-Solutions. Posez-moi vos questions sur nos services premium Kinshasa !
+            </div>
+        </div>
+        
+        <!-- Input -->
+        <div class="p-4 lg:p-6 border-t border-white/10">
+            <div class="flex gap-3">
+                <input type="text" id="chat-input" placeholder="Tapez votre question..." 
+                       class="flex-1 glass-panel p-4 rounded-2xl border-2 border-white/20 focus:border-emerald-500 focus:outline-none text-sm placeholder-slate-400" />
+                <button onclick="sendMessage()" class="w-12 h-12 bg-emerald-500 hover:bg-emerald-400 rounded-2xl flex items-center justify-center text-white transition-all hover:scale-110">
+                    <i class="fas fa-paper-plane"></i>
+                </button>
+            </div>
+            <div class="text-xs text-slate-400 mt-2 text-center">
+                Ou appuyez sur Entrée
+            </div>
+        </div>
+    </div>
+    
+    <!-- Toggle Button -->
+    <button onclick="toggleChatbot()" id="chat-toggle" class="w-16 h-16 lg:w-20 lg:h-20 bg-gradient-to-br from-emerald-500 to-emerald-600 hover:from-emerald-600 hover:to-emerald-700 rounded-3xl shadow-2xl hover:shadow-emerald-500/50 transition-all duration-300 flex items-center justify-center text-white text-2xl lg:text-3xl animate-pulse">
+        <i class="fas fa-comments"></i>
+    </button>
+</div>
+
+<style>
+    #ai-chatbot .scrollbar-thin::-webkit-scrollbar { width: 4px; }
+    #ai-chatbot .scrollbar-thin::-webkit-scrollbar-track { background: rgba(15,23,42,0.5); }
+    #ai-chatbot .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(148,163,184,0.5); border-radius: 2px; }
+    #ai-chatbot .scrollbar-thin::-webkit-scrollbar-thumb:hover { background: #64748b; }
+    
+    [data-theme="light"] #ai-chatbot .scrollbar-thin::-webkit-scrollbar-track { background: rgba(248,250,252,0.3); }
+    [data-theme="light"] #ai-chatbot .scrollbar-thin::-webkit-scrollbar-thumb { background: rgba(71,85,105,0.5); }
+</style>
+
+<script>
+// ✅ 25+ QUESTIONS IA KING-SOLUTIONS (Tes services Sofaenga)
+const faqData = [
+    { q: ["visa", "passeport", "consulat", "voyage"], 
+      a: "✈️ **ASSISTANCE VOYAGE** : 95% succès !\n• Visa USA/Europe : RDV consuls + dossier complet\n• Passeport/DCE express\n• Prix : 150-500$\n**Contact WhatsApp** pour RDV immédiat !" },
+    
+    { q: ["location", "voiture", "chauffeur", "taxi", "transfert"], 
+      a: "🚗 **LOCATION VIP 24/7** :\n• Mercedes/Toyota premium + chauffeur bilingue\n• Aéroport 50$/trajet, journalier 120$\n• Assurance complète incluse\n**Réservez maintenant !**" },
+    
+    { q: ["formation", "anglais", "management", "certificat"], 
+      a: "🎓 **FORMATIONS CERTIFIANTES** :\n• Anglais Affaires (3 mois) : 250$\n• Management/Leadership\n• Certificats internationaux reconnus\n**Inscriptions ouvertes !**" },
+    
+    { q: ["personnel", "employé", "secrétaire", "chauffeur", "garde"], 
+      a: "👥 **PERSONNEL QUALIFIÉ** :\n• Secrétaires/Comptables : 400$/mois\n• Chauffeurs VIP : 600$\n• Contrats 1-12 mois flexibles\n**Recrutement rapide !**" },
+    
+    { q: ["sous-traitance", "agent", "mission"], 
+      a: "🤝 **SOUS-TRAITANCE** :\n• Agents terrain spécialisés\n• Missions 1-6 mois\n• Paie + assurance gérées\n**Devis personnalisé gratuit !**" },
+    
+    { q: ["prix", "tarif", "coût"], 
+      a: "💰 **TARIFS COMPÉTITIFS** :\n• Visa : 150-500$\n• Voiture/jour : 120$\n• Formation : 250$\n• Personnel : 400$/mois\n**Devis gratuit WhatsApp !**" },
+    
+    { q: ["kinshasa", "adresse", "bureau"], 
+      a: "📍 **King-Solutions Kinshasa** :\nMushi, Lingwala\n+243 816 554 684\n**Ouvert 24/7** par WhatsApp !" },
+    
+    { q: ["emploi", "recrutement", "offre"], 
+      a: "💼 **NOUS RECRUTONS** :\nChauffeurs VIP, Secrétaires, Agents\n**Postulez WhatsApp** avec CV !" },
+    
+    { q: ["rdv", "rendez-vous"], 
+      a: "📅 **RDV IMMÉDIAT** :\nRéponse sous 2h WhatsApp\n**Cliquez pour discuter !**" },
+    
+    { q: ["confiance", "fiable", "sérieux"], 
+      a: "🏆 **100% CONFIANCE** :\n247+ clients satisfaits\n95% visa approuvés\n**Garantie satisfaction !**" },
+    
+    // +15 questions techniques/services
+    { q: ["assurance", "voiture"], a: "✅ **ASSURANCE COMPLÈTE** incluse toutes locations !" },
+    { q: ["paiement", "payement"], a: "💳 **Paiement flexible** : Mobile Money / Cash / Virement" },
+    { q: ["durée", "temps", "délai"], a: "⚡ **Ultra-rapide** : Visa 7-15j, Location immédiate" },
+    { q: ["entreprise", "b2b"], a: "🏢 **Services Entreprises** : Contrats annuels volume" },
+    { q: ["particulier"], a: "👨‍👩‍👧‍👦 **Particuliers bienvenus** tous services" },
+    { q: ["anglais"], a: "🇺🇸 **Chauffeurs/Agents bilingues FR/EN**" },
+    { q: ["aéroport"], a: "✈️ **Navette aéroport 24/7** 50$/trajet" },
+    { q: ["weekend"], a: "🎉 **Service WEEKEND/Férié** disponible !" },
+    { q: ["annulation"], a: "🔄 **Annulation gratuite** 24h avant" },
+    { q: ["référence"], a: "⭐ **247+ avis 5⭐** - Demandez nos clients !" },
+    { q: ["devis"], a: "💬 **DEVIS GRATUIT** WhatsApp instantané !" },
+    { q: ["urgence"], a: "🚨 **URGENCE 24/7** : Appelez-nous !" },
+    { q: ["famille"], a: "👨‍👩‍👧‍👦 **Services Famille** spéciaux" },
+    { q: ["entreprise"], a: "🏢 **B2B Contrats** sur mesure" },
+    { q: ["livraison"], a: "🚚 **Livraison documents** Kinshasa 10$" }
+];
+
+// Chatbot Logic IA
+let chatHistory = [];
+
+function toggleChatbot() {
+    const chatbot = document.getElementById('ai-chatbot');
+    const window = document.getElementById('chat-window');
+    const toggle = document.getElementById('chat-toggle');
+    
+    if (window.classList.contains('hidden')) {
+        window.classList.remove('hidden');
+        setTimeout(() => chatbot.classList.remove('hidden'), 300);
+        toggle.innerHTML = '<i class="fas fa-times text-xl"></i>';
+    } else {
+        chatbot.classList.add('hidden');
+        setTimeout(() => window.classList.add('hidden'), 300);
+        toggle.innerHTML = '<i class="fas fa-comments text-2xl"></i>';
+    }
+}
+
+function sendMessage() {
+    const input = document.getElementById('chat-input');
+    const messages = document.getElementById('chat-messages');
+    const userMsg = input.value.trim().toLowerCase();
+    
+    if (!userMsg) return;
+    
+    // User message
+    const userDiv = document.createElement('div');
+    userDiv.className = 'bg-gradient-to-r from-slate-700 to-slate-800 p-4 rounded-2xl rounded-bl-sm max-w-[80%] ml-auto text-sm';
+    userDiv.textContent = input.value;
+    messages.appendChild(userDiv);
+    
+    input.value = '';
+    messages.scrollTop = messages.scrollHeight;
+    
+    // IA Response
+    setTimeout(() => {
+        const response = getAIResponse(userMsg);
+        const aiDiv = document.createElement('div');
+        aiDiv.className = 'bg-emerald-500/20 border border-emerald-500/30 p-4 rounded-2xl rounded-br-sm max-w-[85%] text-sm leading-relaxed';
+        aiDiv.innerHTML = response;
+        messages.appendChild(aiDiv);
+        messages.scrollTop = messages.scrollHeight;
+    }, 800);
+}
+
+function getAIResponse(message) {
+    // Matching IA intelligent
+    for (let faq of faqData) {
+        if (faq.q.some(keyword => message.includes(keyword))) {
+            return faq.a;
+        }
+    }
+    
+    // Fallback IA contextuel
+    if (message.includes('bonjour') || message.includes('salut')) {
+        return "Bonjour ! 👋 Comment puis-je vous aider avec nos services premium King-Solutions ?\n\nServices : ✈️Voyage | 🚗Location | 🎓Formation | 👥Personnel";
+    }
+    
+    if (message.includes('merci') || message.includes('bye')) {
+        return "Au plaisir ! 😊 **Cliquez WhatsApp** pour service humain 24/7 ↓";
+    }
+    
+    if (message.includes('whatsapp') || message.includes('contact')) {
+        return "📱 **WhatsApp Direct** : +243 816 554 684\nOu cliquez le bouton vert ! 🚀";
+    }
+    
+    return "🤖 Je suis spécialisé King-Solutions ! Posez-moi :\n• Visa/passeport ?\n• Location voiture ?\n• Formation ?\n• Personnel ?\n**Ou WhatsApp** pour humain !";
+}
+
+// Entrée keyboard
+document.getElementById('chat-input').addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') sendMessage();
+});
+
+// Auto-open après 10s (optionnel)
+setTimeout(() => {
+    if (!sessionStorage.getItem('chatbotSeen')) {
+        toggleChatbot();
+        sessionStorage.setItem('chatbotSeen', 'true');
+    }
+}, 10000);
+</script>
 </body>
 </html>
