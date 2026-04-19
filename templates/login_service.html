@@ -1,243 +1,241 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <title>SOFAENGA - Enterprise Admin Portal</title>
+    <title>SOFAENGA - Accès Bureau Sécurisé</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         body { 
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif; 
-            background: linear-gradient(135deg, #0f172a 0%, #1e293b 30%, #334155 70%, #475569 100%);
-            min-height: 100vh; padding: 40px 60px; overflow-x: auto;
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #334155 100%);
+            min-height: 100vh; display: flex; align-items: center; justify-content: center;
+            padding: 20px;
         }
         
-        .login-wrapper {
-            max-width: 1600px; margin: 0 auto; display: flex; gap: 80px; align-items: center; min-height: calc(100vh - 80px);
+        .login-container { 
+            background: rgba(255,255,255,0.1); backdrop-filter: blur(30px); 
+            border-radius: 30px; border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 35px 80px rgba(0,0,0,0.4); padding: 60px 50px; 
+            max-width: 500px; width: 100%; text-align: center; position: relative;
+            animation: float 6s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
         }
         
-        /* PANEL GAUCHE - Logo + Info */
-        .left-panel {
-            flex: 0 0 500px; color: white; text-align: center;
+        .logo { 
+            width: 80px; height: 80px; background: linear-gradient(135deg, #10b981, #059669);
+            border-radius: 20px; margin: 0 auto 30px; display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 20px 40px rgba(16,185,129,0.3);
         }
-        .enterprise-logo {
-            width: 140px; height: 140px; background: linear-gradient(135deg, #3b82f6, #1d4ed8, #1e40af);
-            border-radius: 28px; margin: 0 auto 40px; display: flex; flex-direction: column; align-items: center; justify-content: center;
-            font-size: 3.2rem; font-weight: 800; box-shadow: 0 40px 80px rgba(59,130,246,0.4); position: relative; overflow: hidden;
-        }
-        .enterprise-logo::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%; 
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.3), transparent);
-            animation: shineLogo 4s infinite;
-        }
-        @keyframes shineLogo { 0% { left: -100%; } 50% { left: 100%; } 100% { left: 100%; } }
-        .logo-so { font-size: 2.8rem; color: white; z-index: 2; position: relative; }
-        .logo-text { font-size: 0.9rem; font-weight: 600; margin-top: 4px; opacity: 0.95; }
+        .logo i { font-size: 2.5rem; color: white; }
         
-        .enterprise-title { 
-            font-size: 3.2rem; font-weight: 800; margin-bottom: 24px; 
-            background: linear-gradient(135deg, #fbbf24, #f59e0b); -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent; letter-spacing: -0.02em;
+        .login-title { 
+            color: white; font-size: 2.5rem; font-weight: 800; margin-bottom: 10px;
+            text-shadow: 0 0 30px rgba(255,255,255,0.3);
         }
-        .enterprise-subtitle { 
-            font-size: 1.3rem; line-height: 1.7; color: rgba(255,255,255,0.85); 
-            margin-bottom: 40px; font-weight: 400;
+        .login-subtitle { 
+            color: rgba(255,255,255,0.8); font-size: 1.2em; margin-bottom: 40px;
+            font-weight: 500;
         }
         
-        /* PANEL DROIT - Services Grid */
-        .right-panel {
-            flex: 1; background: rgba(255,255,255,0.08); backdrop-filter: blur(30px);
-            border-radius: 32px; padding: 60px; border: 1px solid rgba(255,255,255,0.12);
-            box-shadow: 0 50px 100px rgba(0,0,0,0.4); max-width: 900px;
+        /* Sélecteur Service */
+        .service-selector { 
+            background: rgba(255,255,255,0.15); border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 20px; padding: 20px 25px; margin-bottom: 30px; cursor: pointer;
+            transition: all 0.3s ease;
         }
-        
-        /* Services Grid - TOUS VISIBLES */
-        .services-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); 
-            gap: 24px; margin-bottom: 48px;
+        .service-selector:hover { 
+            background: rgba(255,255,255,0.25); border-color: rgba(255,255,255,0.5);
+            transform: translateY(-2px);
         }
-        .service-card {
-            background: rgba(255,255,255,0.06); border: 2px solid rgba(255,255,255,0.1);
-            border-radius: 24px; padding: 32px 24px; cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative; overflow: hidden; height: 180px; display: flex; flex-direction: column;
-            align-items: center; justify-content: center; text-align: center; backdrop-filter: blur(20px);
-        }
-        .service-card::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; bottom: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent); opacity: 0; transition: opacity 0.3s;
-        }
-        .service-card:hover {
-            transform: translateY(-12px) scale(1.02); border-color: rgba(255,255,255,0.4);
-            box-shadow: 0 40px 80px rgba(0,0,0,0.6); background: rgba(255,255,255,0.12);
-        }
-        .service-card:hover::before { opacity: 1; }
-        .service-card.active {
-            border-color: #fbbf24; background: linear-gradient(135deg, rgba(251,191,36,0.2), rgba(251,191,36,0.1));
-            box-shadow: 0 0 0 4px rgba(251,191,36,0.3);
-        }
-        .service-icon { font-size: 3.2rem; margin-bottom: 16px; opacity: 0.95; transition: all 0.3s; }
-        .service-card:hover .service-icon { transform: scale(1.1) rotate(5deg); filter: drop-shadow(0 8px 16px rgba(251,191,36,0.4)); }
-        .service-name { font-size: 1.3rem; font-weight: 700; color: white; margin-bottom: 8px; }
-        .service-desc { font-size: 0.95rem; color: rgba(255,255,255,0.7); font-weight: 500; }
+        .service-icon { font-size: 2.5rem; margin-bottom: 15px; opacity: 0.9; }
+        .service-name { font-size: 1.4em; font-weight: 700; color: white; }
         
         /* Formulaire */
-        .login-form-wrapper { background: rgba(255,255,255,0.05); border-radius: 24px; padding: 48px; }
+        .form-group { margin-bottom: 25px; text-align: left; }
         label { 
-            display: block; font-weight: 700; color: #fbbf24; font-size: 1.1rem;
-            margin-bottom: 16px; letter-spacing: 0.5px;
+            display: block; color: rgba(255,255,255,0.9); font-weight: 600; 
+            margin-bottom: 10px; font-size: 1.1em;
         }
         input[type="password"] { 
-            width: 100%; padding: 24px 32px; border: 2px solid rgba(255,255,255,0.3);
-            border-radius: 20px; background: rgba(255,255,255,0.08); color: white;
-            font-size: 1.4rem; font-weight: 600; backdrop-filter: blur(20px);
-            transition: all 0.4s ease; margin-bottom: 32px;
+            width: 100%; padding: 20px 25px; border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 20px; background: rgba(255,255,255,0.15); 
+            color: white; font-size: 18px; backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
         }
         input[type="password"]:focus { 
-            outline: none; border-color: #fbbf24; box-shadow: 0 0 0 4px rgba(251,191,36,0.2);
-            background: rgba(255,255,255,0.15); transform: translateY(-2px);
+            outline: none; border-color: #10b981; box-shadow: 0 0 0 4px rgba(16,185,129,0.2);
+            background: rgba(255,255,255,0.2);
         }
-        input[type="password"]::placeholder { color: rgba(255,255,255,0.5); }
+        input::placeholder { color: rgba(255,255,255,0.6); }
         
-        .login-btn { 
-            width: 100%; padding: 28px; background: linear-gradient(135deg, #fbbf24, #f59e0b);
-            color: #1e293b; border: none; border-radius: 24px; font-size: 1.5rem; font-weight: 800;
-            cursor: pointer; transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 20px 40px rgba(251,191,36,0.4); text-transform: uppercase;
-            letter-spacing: 1px; position: relative; overflow: hidden;
+        .btn-login { 
+            width: 100%; padding: 22px; background: linear-gradient(135deg, #10b981, #059669);
+            color: white; border: none; border-radius: 25px; font-size: 1.3em; 
+            font-weight: 800; cursor: pointer; margin-top: 20px; position: relative;
+            overflow: hidden; transition: all 0.4s ease; text-transform: uppercase;
+            letter-spacing: 1px; box-shadow: 0 20px 40px rgba(16,185,129,0.4);
         }
-        .login-btn:hover { 
-            transform: translateY(-6px); box-shadow: 0 30px 60px rgba(251,191,36,0.6);
-            background: linear-gradient(135deg, #f59e0b, #d97706);
+        .btn-login:hover { 
+            transform: translateY(-3px); box-shadow: 0 25px 50px rgba(16,185,129,0.6);
         }
-        .login-btn:active { transform: translateY(-2px); }
+        .btn-login:active { transform: translateY(-1px); }
         
         /* Messages Flash */
-        .flash { padding: 20px 32px; margin-bottom: 32px; border-radius: 20px; font-weight: 700; }
-        .flash.success { background: rgba(34,197,94,0.2); border-left: 6px solid #22c55e; color: white; }
-        .flash.error { background: rgba(239,68,68,0.2); border-left: 6px solid #ef4444; color: white; }
-        
-        /* Responsive */
-        @media (max-width: 1400px) { .login-wrapper { flex-direction: column; gap: 60px; padding: 20px; } }
-        @media (max-width: 768px) { 
-            body { padding: 20px; } .right-panel { padding: 40px 30px; margin: 0 10px; }
-            .services-grid { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 20px; }
+        .flash { 
+            padding: 15px 25px; margin-bottom: 25px; border-radius: 15px; 
+            font-weight: 600; animation: slideDown 0.4s ease;
         }
+        .flash.success { background: rgba(16,185,129,0.3); border-left: 5px solid #10b981; }
+        .flash.error { background: rgba(239,68,68,0.3); border-left: 5px solid #ef4444; }
+        @keyframes slideDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
         
-        /* Service Colors */
-        .service-finance .service-icon { color: #f59e0b; }
-        .service-location .service-icon { color: #10b981; }
-        .service-formation .service-icon { color: #8b5cf6; }
-        .service-travail .service-icon { color: #3b82f6; }
-        .service-strayant .service-icon { color: #ec4899; }
-        .service-reception .service-icon { color: #ef4444; }
-        .service-direction .service-icon { color: #fbbf24; }
+        /* Services Preview */
+        .services-preview { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); 
+            gap: 15px; margin-top: 40px; padding-top: 30px; border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .service-preview { 
+            padding: 20px 10px; background: rgba(255,255,255,0.1); border-radius: 15px;
+            text-align: center; cursor: pointer; transition: all 0.3s ease;
+        }
+        .service-preview:hover { background: rgba(16,185,129,0.3); transform: scale(1.05); }
+        .service-preview i { font-size: 1.8rem; margin-bottom: 8px; display: block; }
+        .service-preview span { font-size: 0.85em; font-weight: 600; }
+        
+        @media (max-width: 480px) {
+            .login-container { padding: 40px 30px; margin: 20px; }
+            .login-title { font-size: 2rem; }
+        }
     </style>
 </head>
 <body>
-    <div class="login-wrapper">
-        <!-- PANEL GAUCHE - Branding -->
-        <div class="left-panel">
-            <div class="enterprise-logo">
-                <div class="logo-so">SO</div>
-                <div class="logo-text">ENGA</div>
-            </div>
-            <h1 class="enterprise-title">Enterprise Portal</h1>
-            <p class="enterprise-subtitle">
-                Système de gestion intégré pour services administratifs<br>
-                Finance • Location • Formation • Voyage • RH • Réception • Direction
-            </p>
+    <div class="login-container">
+        <!-- Logo -->
+        <div class="logo">
+            <i class="fas fa-shield-alt"></i>
         </div>
         
-        <!-- PANEL DROIT - Services + Formulaire -->
-        <div class="right-panel">
-            <!-- Messages Flash -->
-            {% with messages = get_flashed_messages(with_categories=true) %}
-                {% if messages %}
-                    {% for category, message in messages %}
-                        <div class="flash {{ category }}">{{ message }}</div>
-                    {% endfor %}
-                {% endif %}
-            {% endwith %}
-            
-            <!-- Services Grid - TOUS VISIBLES -->
-            <div class="services-grid">
-                <div class="service-card active service-finance" data-service="finance">
-                    <i class="fas fa-coins service-icon"></i>
-                    <div class="service-name">Finance</div>
-                    <div class="service-desc">Trésorerie & Comptabilité</div>
-                </div>
-                <div class="service-card service-location" data-service="location">
-                    <i class="fas fa-car service-icon"></i>
-                    <div class="service-name">Location</div>
-                    <div class="service-desc">Gestion flotte véhicules</div>
-                </div>
-                <div class="service-card service-formation" data-service="formation">
-                    <i class="fas fa-graduation-cap service-icon"></i>
-                    <div class="service-name">Formation</div>
-                    <div class="service-desc">Planning & Inscriptions</div>
-                </div>
-                <div class="service-card service-travail" data-service="travail">
-                    <i class="fas fa-plane service-icon"></i>
-                    <div class="service-name">Voyage</div>
-                    <div class="service-desc">Visas & Assistance</div>
-                </div>
-                <div class="service-card service-strayant" data-service="strayant">
-                    <i class="fas fa-handshake service-icon"></i>
-                    <div class="service-name">RH Ext.</div>
-                    <div class="service-desc">Sous-traitance agents</div>
-                </div>
-                <div class="service-card service-reception" data-service="reception">
-                    <i class="fas fa-door-open service-icon"></i>
-                    <div class="service-name">Réception</div>
-                    <div class="service-desc">Gestion visiteurs</div>
-                </div>
-                <div class="service-card service-direction" data-service="direction">
-                    <i class="fas fa-chart-line service-icon"></i>
-                    <div class="service-name">Direction</div>
-                    <div class="service-desc">Tableau de bord CEO</div>
-                </div>
+        <!-- Titre -->
+        <h1 class="login-title">Accès Sécurisé</h1>
+        <p class="login-subtitle">Sélectionnez votre service et entrez le mot de passe</p>
+        
+        <!-- Messages Flash -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <div class="flash {{ category }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+        
+        <!-- Formulaire -->
+        <form method="POST" action="/login_service">
+            <!-- Sélecteur Service -->
+            <div class="service-selector" onclick="toggleServiceSelector()">
+                <div class="service-icon" id="service-icon"><i class="fas fa-cog fa-spin"></i></div>
+                <div class="service-name" id="service-name">Choisir Service...</div>
+                <input type="hidden" name="service" id="service-input" required>
             </div>
             
-            <!-- Formulaire -->
-            <form method="POST" action="/login_service" class="login-form-wrapper">
-                <input type="hidden" id="service-hidden" name="service" value="finance">
-                <label>🔐 Service Password</label>
-                <input type="password" id="password" name="password" placeholder="Enter service password..." required autocomplete="off">
-                <button type="submit" class="login-btn">
-                    <i class="fas fa-sign-in-alt mr-3"></i> ACCESS SERVICE PANEL
-                </button>
-            </form>
+            <!-- Services cachés (pour sélection) -->
+            <div style="display: none;">
+                <input type="radio" name="service_radio" id="finance" value="finance" onchange="selectService('finance', 'fas fa-coins', 'Finance')">
+                <label for="finance"></label>
+                <input type="radio" name="service_radio" id="location" value="location" onchange="selectService('location', 'fas fa-car', 'Location Voiture')">
+                <label for="location"></label>
+                <input type="radio" name="service_radio" id="formation" value="formation" onchange="selectService('formation', 'fas fa-graduation-cap', 'Formation')">
+                <label for="formation"></label>
+                <input type="radio" name="service_radio" id="travail" value="travail" onchange="selectService('travail', 'fas fa-plane', 'Assistance Voyage')">
+                <label for="travail"></label>
+                <input type="radio" name="service_radio" id="strayant" value="strayant" onchange="selectService('strayant', 'fas fa-handshake', 'Sous-Traitance')">
+                <label for="strayant"></label>
+                <input type="radio" name="service_radio" id="reception" value="reception" onchange="selectService('reception', 'fas fa-door-open', 'Réception')">
+                <label for="reception"></label>
+                <input type="radio" name="service_radio" id="direction" value="direction" onchange="selectService('direction', 'fas fa-chart-line', 'Direction')">
+                <label for="direction"></label>
+            </div>
+            
+            <!-- Mot de passe -->
+            <div class="form-group">
+                <label for="password">🔒 Mot de Passe Service</label>
+                <input type="password" id="password" name="password" placeholder="Entrez le mot de passe..." required autocomplete="off">
+            </div>
+            
+            <!-- Bouton -->
+            <button type="submit" class="btn-login">
+                <i class="fas fa-sign-in-alt mr-3"></i>Accéder au Bureau
+            </button>
+        </form>
+        
+        <!-- Aperçu Services -->
+        <div class="services-preview">
+            <div class="service-preview" onclick="document.getElementById('finance').checked=true; selectService('finance', 'fas fa-coins', 'Finance')">
+                <i class="fas fa-coins text-yellow-400"></i>
+                <span>Finance</span>
+            </div>
+            <div class="service-preview" onclick="document.getElementById('location').checked=true; selectService('location', 'fas fa-car', 'Location Voiture')">
+                <i class="fas fa-car text-green-400"></i>
+                <span>Location</span>
+            </div>
+            <div class="service-preview" onclick="document.getElementById('formation').checked=true; selectService('formation', 'fas fa-graduation-cap', 'Formation')">
+                <i class="fas fa-graduation-cap text-purple-400"></i>
+                <span>Formation</span>
+            </div>
+            <div class="service-preview" onclick="document.getElementById('travail').checked=true; selectService('travail', 'fas fa-plane', 'Assistance Voyage')">
+                <i class="fas fa-plane text-blue-400"></i>
+                <span>Voyage</span>
+            </div>
+            <div class="service-preview" onclick="document.getElementById('strayant').checked=true; selectService('strayant', 'fas fa-handshake', 'Sous-Traitance')">
+                <i class="fas fa-handshake text-pink-400"></i>
+                <span>Sous-Trait.</span>
+            </div>
+            <div class="service-preview" onclick="document.getElementById('reception').checked=true; selectService('reception', 'fas fa-door-open', 'Réception')">
+                <i class="fas fa-door-open text-red-400"></i>
+                <span>Réception</span>
+            </div>
+            <div class="service-preview" onclick="document.getElementById('direction').checked=true; selectService('direction', 'fas fa-chart-line', 'Direction')">
+                <i class="fas fa-chart-line text-indigo-400"></i>
+                <span>Direction</span>
+            </div>
         </div>
     </div>
 
     <script>
-        // Service Selection - Landscape Optimized
-        document.querySelectorAll('.service-card').forEach(card => {
-            card.addEventListener('click', function() {
-                // Remove active from all
-                document.querySelectorAll('.service-card').forEach(c => c.classList.remove('active'));
-                document.getElementById('service-hidden').value = this.dataset.service;
-                
-                // Activate clicked
-                this.classList.add('active');
-                
-                // Pulse animation
-                this.style.transform = 'translateY(-8px) scale(1.03)';
-                setTimeout(() => {
-                    this.style.transform = '';
-                }, 300);
+        let serviceSelectOpen = false;
+        
+        function selectService(service, icon, name) {
+            document.getElementById('service-input').value = service;
+            document.getElementById('service-icon').innerHTML = `<i class="${icon}"></i>`;
+            document.getElementById('service-name').textContent = name;
+            document.getElementById('password').focus();
+        }
+        
+        function toggleServiceSelector() {
+            const radios = document.querySelectorAll('input[name="service_radio"]');
+            serviceSelectOpen = !serviceSelectOpen;
+            radios.forEach(r => r.parentElement.style.display = serviceSelectOpen ? 'block' : 'none');
+        }
+        
+        // Auto-focus
+        document.addEventListener('DOMContentLoaded', function() {
+            // Clic sur services preview
+            document.querySelectorAll('.service-preview').forEach(preview => {
+                preview.addEventListener('click', function() {
+                    const service = this.dataset.service;  // Ajouter data-service aux previews
+                });
             });
         });
-
-        // Auto-focus password
-        document.getElementById('password').focus();
-
-        // Keyboard navigation
-        document.addEventListener('keydown', function(e) {
-            if (e.key === 'Enter' && document.activeElement.tagName !== 'INPUT') {
-                document.getElementById('password').focus();
+        
+        // Enter sur password → submit
+        document.getElementById('password').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter' && document.getElementById('service-input').value) {
+                document.querySelector('form').submit();
             }
         });
     </script>
