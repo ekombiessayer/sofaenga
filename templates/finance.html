@@ -1,374 +1,394 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <title>King-Solutions - Gestion Financière</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body { 
-            font-family: 'Inter', sans-serif; 
-            background: linear-gradient(135deg, #388E3C 0%, #2E7D32 50%, #1B5E20 100%);
-            min-height: 100vh; padding: 20px; color: white;
-        }
-        .container { max-width: 1600px; margin: 0 auto; }
-        
-        .header { text-align: center; margin-bottom: 40px; }
-        .header h1 { font-size: 3em; font-weight: 800; margin-bottom: 15px; text-shadow: 0 0 20px rgba(255,255,255,0.3); }
-        .header p { font-size: 1.3em; opacity: 0.95; }
+    <title>King-Solutions - Gestion Financière</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Inter', sans-serif; 
+            background: linear-gradient(135deg, #388E3C 0%, #2E7D32 50%, #1B5E20 100%);
+            min-height: 100vh; padding: 20px; color: white;
+        }
+        .container { max-width: 1600px; margin: 0 auto; }
+        
+        .header { text-align: center; margin-bottom: 40px; }
+        .header h1 { font-size: 3em; font-weight: 800; margin-bottom: 15px; text-shadow: 0 0 20px rgba(255,255,255,0.3); }
+        .header p { font-size: 1.3em; opacity: 0.95; }
 
-        /* Navigation rapide */
-        .nav-quick { 
-            background: rgba(255,255,255,0.15); border-radius: 25px; padding: 20px; margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.3); display: flex; gap: 15px; 
-            flex-wrap: wrap; justify-content: center; backdrop-filter: blur(20px);
-        }
-        .nav-btn { 
-            padding: 12px 24px; background: linear-gradient(135deg, #FF9800, #F57C00); 
-            color: white; text-decoration: none; border-radius: 15px; 
-            font-weight: 600; transition: all 0.3s ease;
-        }
-        .nav-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(255,152,0,0.4); }
 
-        /* Stats Financières */
-        .stats-grid { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
-            gap: 25px; margin-bottom: 35px;
-        }
-        .stat-card { 
-            background: rgba(255,255,255,0.2); border-radius: 25px; padding: 35px; text-align: center;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.2); backdrop-filter: blur(25px);
-            border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s;
-        }
-        .stat-card:hover { transform: translateY(-5px); }
-        .stat-icon { font-size: 3.5em; margin-bottom: 20px; opacity: 0.9; }
-        .stat-number { font-size: 3em; font-weight: 800; color: #FFD700; margin-bottom: 10px; }
-        .stat-label { color: rgba(255,255,255,0.95); font-weight: 600; font-size: 1.1em; }
-        .stat-periode { font-size: 0.9em; color: #90EE90; font-weight: 500; }
+        /* Navigation rapide */
+        .nav-quick { 
+            background: rgba(255,255,255,0.15); border-radius: 25px; padding: 20px; margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3); display: flex; gap: 15px; 
+            flex-wrap: wrap; justify-content: center; backdrop-filter: blur(20px);
+        }
+        .nav-btn { 
+            padding: 12px 24px; background: linear-gradient(135deg, #FF9800, #F57C00); 
+            color: white; text-decoration: none; border-radius: 15px; 
+            font-weight: 600; transition: all 0.3s ease;
+        }
+        .nav-btn:hover { transform: translateY(-3px); box-shadow: 0 15px 30px rgba(255,152,0,0.4); }
 
-        /* Filtres Période */
-        .filtres { 
-            background: white; border-radius: 25px; padding: 20px; margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15); display: flex; gap: 15px; align-items: center;
-            flex-wrap: wrap;
-        }
-        .filtre-btn { 
-            padding: 12px 24px; background: transparent; border: 2px solid #388E3C; 
-            border-radius: 20px; color: #388E3C; font-weight: 700; cursor: pointer;
-            transition: all 0.3s; font-size: 0.95em;
-        }
-        .filtre-btn.active, .filtre-btn:hover { background: #388E3C; color: white; }
 
-        /* Onglets */
-        .tabs { 
-            background: white; border-radius: 25px; padding: 5px; margin-bottom: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.15); display: flex; gap: 5px;
-        }
-        .tab-btn { 
-            flex: 1; padding: 20px; background: transparent; border: none; 
-            border-radius: 20px; font-weight: 700; color: #666; cursor: pointer;
-            transition: all 0.3s ease; font-size: 1.1em;
-        }
-        .tab-btn.active { background: linear-gradient(135deg, #388E3C, #2E7D32); color: white; }
+        /* Stats Financières */
+        .stats-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); 
+            gap: 25px; margin-bottom: 35px;
+        }
+        .stat-card { 
+            background: rgba(255,255,255,0.2); border-radius: 25px; padding: 35px; text-align: center;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.2); backdrop-filter: blur(25px);
+            border: 1px solid rgba(255,255,255,0.2); transition: all 0.3s;
+        }
+        .stat-card:hover { transform: translateY(-5px); }
+        .stat-icon { font-size: 3.5em; margin-bottom: 20px; opacity: 0.9; }
+        .stat-number { font-size: 3em; font-weight: 800; color: #FFD700; margin-bottom: 10px; }
+        .stat-label { color: rgba(255,255,255,0.95); font-weight: 600; font-size: 1.1em; }
+        .stat-periode { font-size: 0.9em; color: #90EE90; font-weight: 500; }
 
-        /* Formulaire Transaction */
-        .form-section { 
-            background: white; border-radius: 25px; padding: 40px; margin-bottom: 35px;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15); color: #333;
-        }
-        .form-title { color: #333; margin-bottom: 30px; font-size: 2em; font-weight: 700; }
-        .form-grid { 
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
-            gap: 30px; margin-bottom: 30px;
-        }
-        label { display: block; font-weight: 700; color: #333; margin-bottom: 10px; }
-        input, select, textarea { 
-            width: 100%; padding: 18px 20px; border: 3px solid #e8f5e8; 
-            border-radius: 15px; font-size: 16px; transition: all 0.3s ease;
-            background: #f8fff8;
-        }
-        input:focus, select:focus, textarea:focus { 
-            outline: none; border-color: #388E3C; box-shadow: 0 0 0 5px rgba(56,142,60,0.15);
-        }
-        .btn-submit { 
-            background: linear-gradient(135deg, #388E3C, #2E7D32); color: white; 
-            padding: 25px 50px; border: none; border-radius: 20px; font-size: 1.4em; 
-            font-weight: 700; cursor: pointer; width: 100%; margin-top: 25px;
-            transition: all 0.4s ease;
-        }
-        .btn-submit:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(56,142,60,0.4); }
 
-        /* Tableau Finances */
-        .table-container { 
-            background: white; border-radius: 25px; padding: 40px; overflow-x: auto;
-            box-shadow: 0 25px 50px rgba(0,0,0,0.15); color: #333;
-        }
-        .table-title { color: #333; margin-bottom: 30px; font-size: 2em; font-weight: 700; }
-        table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
-        th { 
-            background: linear-gradient(135deg, #388E3C, #2E7D32); color: white; 
-            padding: 20px 15px; text-align: left; font-weight: 700;
-        }
-        td { padding: 18px 15px; border-bottom: 2px solid #f0fff0; }
-        tr:hover { background: #f8fff8; }
-        
-        .status-paye { background: linear-gradient(135deg, #4CAF50, #45a049); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; }
-        .status-attente { background: linear-gradient(135deg, #FF9800, #F57C00); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; }
-        .recette { color: #4CAF50; font-weight: 700; }
-        .depense { color: #f44336; font-weight: 700; }
-        .actions { display: flex; gap: 10px; }
-        .btn-action { padding: 8px 12px; border-radius: 10px; text-decoration: none; font-size: 0.85em; transition: all 0.3s; }
-        .btn-view { background: #2196F3; color: white; }
-        .btn-edit { background: #FF9800; color: white; }
-        .btn-delete { background: #f44336; color: white; }
+        /* Filtres Période */
+        .filtres { 
+            background: white; border-radius: 25px; padding: 20px; margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15); display: flex; gap: 15px; align-items: center;
+            flex-wrap: wrap;
+        }
+        .filtre-btn { 
+            padding: 12px 24px; background: transparent; border: 2px solid #388E3C; 
+            border-radius: 20px; color: #388E3C; font-weight: 700; cursor: pointer;
+            transition: all 0.3s; font-size: 0.95em;
+        }
+        .filtre-btn.active, .filtre-btn:hover { background: #388E3C; color: white; }
 
-        /* Messagerie intégrée */
-        .messagerie-finance { 
-            background: rgba(255,255,255,0.1); border-radius: 20px; padding: 25px; margin-top: 30px;
-            box-shadow: 0 20px 40px rgba(0,0,0,0.2); backdrop-filter: blur(20px);
-        }
 
-        @media (max-width: 768px) {
-            .form-grid, .stats-grid { grid-template-columns: 1fr; }
-            .tabs { flex-direction: column; }
-            .filtres { flex-direction: column; gap: 10px; }
-        }
-    </style>
+        /* Onglets */
+        .tabs { 
+            background: white; border-radius: 25px; padding: 5px; margin-bottom: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15); display: flex; gap: 5px;
+        }
+        .tab-btn { 
+            flex: 1; padding: 20px; background: transparent; border: none; 
+            border-radius: 20px; font-weight: 700; color: #666; cursor: pointer;
+            transition: all 0.3s ease; font-size: 1.1em;
+        }
+        .tab-btn.active { background: linear-gradient(135deg, #388E3C, #2E7D32); color: white; }
+
+
+        /* Formulaire Transaction */
+        .form-section { 
+            background: white; border-radius: 25px; padding: 40px; margin-bottom: 35px;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15); color: #333;
+        }
+        .form-title { color: #333; margin-bottom: 30px; font-size: 2em; font-weight: 700; }
+        .form-grid { 
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); 
+            gap: 30px; margin-bottom: 30px;
+        }
+        label { display: block; font-weight: 700; color: #333; margin-bottom: 10px; }
+        input, select, textarea { 
+            width: 100%; padding: 18px 20px; border: 3px solid #e8f5e8; 
+            border-radius: 15px; font-size: 16px; transition: all 0.3s ease;
+            background: #f8fff8;
+        }
+        input:focus, select:focus, textarea:focus { 
+            outline: none; border-color: #388E3C; box-shadow: 0 0 0 5px rgba(56,142,60,0.15);
+        }
+        .btn-submit { 
+            background: linear-gradient(135deg, #388E3C, #2E7D32); color: white; 
+            padding: 25px 50px; border: none; border-radius: 20px; font-size: 1.4em; 
+            font-weight: 700; cursor: pointer; width: 100%; margin-top: 25px;
+            transition: all 0.4s ease;
+        }
+        .btn-submit:hover { transform: translateY(-5px); box-shadow: 0 20px 40px rgba(56,142,60,0.4); }
+
+
+        /* Tableau Finances */
+        .table-container { 
+            background: white; border-radius: 25px; padding: 40px; overflow-x: auto;
+            box-shadow: 0 25px 50px rgba(0,0,0,0.15); color: #333;
+        }
+        .table-title { color: #333; margin-bottom: 30px; font-size: 2em; font-weight: 700; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.95em; }
+        th { 
+            background: linear-gradient(135deg, #388E3C, #2E7D32); color: white; 
+            padding: 20px 15px; text-align: left; font-weight: 700;
+        }
+        td { padding: 18px 15px; border-bottom: 2px solid #f0fff0; }
+        tr:hover { background: #f8fff8; }
+        
+        .status-paye { background: linear-gradient(135deg, #4CAF50, #45a049); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; }
+        .status-attente { background: linear-gradient(135deg, #FF9800, #F57C00); color: white; padding: 8px 16px; border-radius: 20px; font-weight: 600; }
+        .recette { color: #4CAF50; font-weight: 700; }
+        .depense { color: #f44336; font-weight: 700; }
+        .actions { display: flex; gap: 10px; }
+        .btn-action { padding: 8px 12px; border-radius: 10px; text-decoration: none; font-size: 0.85em; transition: all 0.3s; }
+        .btn-view { background: #2196F3; color: white; }
+        .btn-edit { background: #FF9800; color: white; }
+        .btn-delete { background: #f44336; color: white; }
+
+
+        /* Messagerie intégrée */
+        .messagerie-finance { 
+            background: rgba(255,255,255,0.1); border-radius: 20px; padding: 25px; margin-top: 30px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.2); backdrop-filter: blur(20px);
+        }
+
+
+        @media (max-width: 768px) {
+            .form-grid, .stats-grid { grid-template-columns: 1fr; }
+            .tabs { flex-direction: column; }
+            .filtres { flex-direction: column; gap: 10px; }
+        }
+    </style>
 </head>
 <body>
-    <div class="container">
-        <!-- Header + Navigation -->
-        <div class="header">
-            <h1><i class="fas fa-coins"></i> Finances King-Solutions</h1>
-            <p>Trésorerie Générale: <strong id="tresorerie">{{ "%.0f"|format(tresorerie) }} usd</strong> 
-               | Période: <span class="stat-periode">{{ periode|default('Toutes') }}</span></p>
-            
-            <!-- Navigation rapide -->
-            <div class="nav-quick">
-                <a href="/" class="nav-btn"><i class="fas fa-home mr-2"></i>Accueil Client</a>
-                <a href="/bureau" class="nav-btn"><i class="fas fa-tachometer-alt mr-2"></i>Bureau</a>
-                <a href="/direction" class="nav-btn"><i class="fas fa-chart-line mr-2"></i>Direction</a>
-                <a href="/logout" class="nav-btn bg-red-600 hover:bg-red-500"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
-            </div>
-        </div>
+    <div class="container">
+        <!-- Header + Navigation -->
+        <div class="header">
+            <h1><i class="fas fa-coins"></i> Finances King-Solutions</h1>
+            <p>Trésorerie Générale: <strong id="tresorerie">{{ "%.0f"|format(tresorerie) }} usd</strong> 
+               | Période: <span class="stat-periode">{{ periode|default('Toutes') }}</span></p>
+            
+            <!-- Navigation rapide -->
+            <div class="nav-quick">
+                <a href="/" class="nav-btn"><i class="fas fa-home mr-2"></i>Accueil Client</a>
+                <a href="/bureau" class="nav-btn"><i class="fas fa-tachometer-alt mr-2"></i>Bureau</a>
+                <a href="/direction" class="nav-btn"><i class="fas fa-chart-line mr-2"></i>Direction</a>
+                <a href="/logout" class="nav-btn bg-red-600 hover:bg-red-500"><i class="fas fa-sign-out-alt mr-2"></i>Logout</a>
+            </div>
+        </div>
 
-        <!-- Filtres Période -->
-        <div class="filtres">
-            <button class="filtre-btn {% if periode == 'tous' or not periode %}active{% endif %}" onclick="filtrerPeriode('tous')">
-                Toutes <span id="total-all">{{ total_transactions }}</span>
-            </button>
-            <button class="filtre-btn {% if periode == 'semaine' %}active{% endif %}" onclick="filtrerPeriode('semaine')">
-                Semaine <span id="total-semaine">-</span>
-            </button>
-            <button class="filtre-btn {% if periode == 'mois' %}active{% endif %}" onclick="filtrerPeriode('mois')">
-                Mois <span id="total-mois">-</span>
-            </button>
-            <button class="filtre-btn {% if periode == 'annee' %}active{% endif %}" onclick="filtrerPeriode('annee')">
-                Année <span id="total-annee">-</span>
-            </button>
-            <a href="/finance" class="filtre-btn bg-gray-600 hover:bg-gray-500">↻ Refresh</a>
-        </div>
 
-        <!-- Stats Financières -->
-        <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-arrow-up text-emerald-400"></i></div>
-                <div class="stat-number">{{ "%.0f"|format(recettes) }}</div>
-                <div class="stat-label">Recettes Totales (usd)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-arrow-down text-red-400"></i></div>
-                <div class="stat-number">{{ "%.0f"|format(depenses) }}</div>
-                <div class="stat-label">Dépenses Totales (usd)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-balance-scale text-yellow-400"></i></div>
-                <div class="stat-number">{{ "%.0f"|format(tresorerie) }}</div>
-                <div class="stat-label">Trésorerie Nette (usd)</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon"><i class="fas fa-chart-pie text-blue-400"></i></div>
-                <div class="stat-number">{{ total_transactions }}</div>
-                <div class="stat-label">Transactions Total</div>
-            </div>
-        </div>
+        <!-- Filtres Période -->
+        <div class="filtres">
+            <button class="filtre-btn {% if periode == 'tous' or not periode %}active{% endif %}" onclick="filtrerPeriode('tous')">
+                Toutes <span id="total-all">{{ total_transactions }}</span>
+            </button>
+            <button class="filtre-btn {% if periode == 'semaine' %}active{% endif %}" onclick="filtrerPeriode('semaine')">
+                Semaine <span id="total-semaine">-</span>
+            </button>
+            <button class="filtre-btn {% if periode == 'mois' %}active{% endif %}" onclick="filtrerPeriode('mois')">
+                Mois <span id="total-mois">-</span>
+            </button>
+            <button class="filtre-btn {% if periode == 'annee' %}active{% endif %}" onclick="filtrerPeriode('annee')">
+                Année <span id="total-annee">-</span>
+            </button>
+            <a href="/finance" class="filtre-btn bg-gray-600 hover:bg-gray-500">↻ Refresh</a>
+        </div>
 
-        <!-- Onglets -->
-        <div class="tabs">
-            <button class="tab-btn active" onclick="showTab('nouvelle-transaction')">➕ Nouvelle Dépense</button>
-            <button class="tab-btn" onclick="showTab('historique')">📋 Historique</button>
-            <button class="tab-btn" onclick="showTab('messagerie')">💬 Messagerie</button>
-        </div>
 
-        <!-- Nouvelle Transaction (Dépenses manuelles) -->
-        <div id="nouvelle-transaction" class="form-section" style="display: block;">
-            <h2 class="form-title">➕ Nouvelle Dépense Manuelle</h2>
-            <form action="/ajouter_depense" method="POST">
-                <div class="form-grid">
-                    <div>
-                        <label>🏷️ Type <span style="color:#f44336;">*</span></label>
-                        <select name="type" required>
-                            <option value="depense">💸 DÉPENSE</option>
-                        </select>
-                    </div>
-                    <div>
-                        <label>📝 Raison/Nom Service <span style="color:#f44336;">*</span></label>
-                        <input type="text" name="raison" placeholder="Ex: Location bureau, Fournitures..." required>
-                    </div>
-                    <div>
-                        <label>💵 Montant (usd) <span style="color:#f44336;">*</span></label>
-                        <input type="number" name="montant" step="1000" min="1000" placeholder="50000" required>
-                    </div>
-                    <div>
-                        <label>📅 Date/Heure</label>
-                        <input type="datetime-local" name="date_heure">
-                    </div>
-                </div>
-                <button type="submit" class="btn-submit">
-                    <i class="fas fa-save mr-3"></i> 💾 ENREGISTRER DÉPENSE
-                </button>
-            </form>
-            <p class="text-center mt-6 text-sm text-slate-600 italic">
-                💡 <strong>Les recettes sont AUTOMATIQUES</strong> (locations, formations...)
-            </p>
-        </div>
+        <!-- Stats Financières -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-arrow-up text-emerald-400"></i></div>
+                <div class="stat-number">{{ "%.0f"|format(recettes) }}</div>
+                <div class="stat-label">Recettes Totales (usd)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-arrow-down text-red-400"></i></div>
+                <div class="stat-number">{{ "%.0f"|format(depenses) }}</div>
+                <div class="stat-label">Dépenses Totales (usd)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-balance-scale text-yellow-400"></i></div>
+                <div class="stat-number">{{ "%.0f"|format(tresorerie) }}</div>
+                <div class="stat-label">Trésorerie Nette (usd)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-chart-pie text-blue-400"></i></div>
+                <div class="stat-number">{{ total_transactions }}</div>
+                <div class="stat-label">Transactions Total</div>
+            </div>
+        </div>
 
-        <!-- Historique Transactions -->
-        <div id="historique" class="form-section" style="display: none;">
-            <h2 class="form-title">📋 Historique Transactions ({{ total_transactions }})</h2>
-            {% if transactions %}
-            <div class="table-container">
-                <table>
-                    <thead>
-                        <tr>
-                            <th>ID</th>
-                            <th>Type</th>
-                            <th>Raison (Service)</th>
-                            <th>Montant</th>
-                            <th>Date/Heure</th>
-                            <th>Actions</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {% for t in transactions %}
-                        <tr>
-                            <td><strong>#{{ t.id }}</strong></td>
-                            <td>
-                                {% if t.type == 'recette' %}
-                                    <span class="status-paye">💰 {{ t.type|upper }}</span>
-                                {% else %}
-                                    <span class="status-attente">💸 {{ t.type|upper }}</span>
-                                {% endif %}
-                            </td>
-                            <td>{{ t.raison }}</td>
-                            <td class="{{ t.type }}">
-                                {{ "%.0f"|format(t.montant) }} usd
-                            </td>
-                            <td>{{ t.date_heure.strftime('%d/%m/%Y %H:%M') }}</td>
-                            <td class="actions">
-                                <a href="#" class="btn-action btn-view" title="Détails">
-                                    <i class="fas fa-eye"></i>
-                                </a>
-                                <a href="#" class="btn-action btn-edit" title="Modifier">
-                                    <i class="fas fa-edit"></i>
-                                </a>
-                            </td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-            {% else %}
-            <div style="text-align: center; padding: 100px; color: #666;">
-                <i class="fas fa-coins" style="font-size: 8em; color: #e8f5e8;"></i>
-                <h2>Aucune transaction enregistrée</h2>
-                <p>Ajoutez votre première dépense ci-dessus !</p>
-            </div>
-            {% endif %}
-        </div>
 
-        <!-- Messagerie Finance -->
-        <div id="messagerie" class="form-section" style="display: none;">
-            <h2 class="form-title">💬 Messagerie Finance</h2>
-            <div class="messagerie-finance">
-                <div class="messages-list" id="messages-finance">
-                    <!-- Messages chargés par JS -->
-                </div>
-                <div class="flex gap-3 mt-6">
-                    <select id="service-dest-finance" class="flex-1 p-3 border-2 border-white/30 rounded-xl bg-white/10 text-white">
-                        <option value="direction">Direction</option>
-                        <option value="location">Location</option>
-                        <option value="formation">Formation</option>
-                    </select>
-                    <input type="text" id="msg-finance" class="msg-input" placeholder="Message finance...">
-                    <button onclick="envoyerMsgFinance()" class="msg-send">
-                        <i class="fas fa-paper-plane"></i>
-                    </button>
-                </div>
-            </div>
-        </div>
-    </div>
+        <!-- Onglets -->
+        <div class="tabs">
+            <button class="tab-btn active" onclick="showTab('nouvelle-transaction')">➕ Nouvelle Dépense</button>
+            <button class="tab-btn" onclick="showTab('historique')">📋 Historique</button>
+            <button class="tab-btn" onclick="showTab('messagerie')">💬 Messagerie</button>
+        </div>
 
-    <script>
-        let periodeActuelle = '{{ periode|default("tous") }}';
 
-        // Onglets
-        function showTab(tabId) {
-            document.querySelectorAll('.form-section').forEach(section => {
-                section.style.display = 'none';
-            });
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            document.getElementById(tabId).style.display = 'block';
-            event.target.classList.add('active');
-        }
+        <!-- Nouvelle Transaction (Dépenses manuelles) -->
+        <div id="nouvelle-transaction" class="form-section" style="display: block;">
+            <h2 class="form-title">➕ Nouvelle Dépense Manuelle</h2>
+            <form action="/ajouter_depense" method="POST">
+                <div class="form-grid">
+                    <div>
+                        <label>🏷️ Type <span style="color:#f44336;">*</span></label>
+                        <select name="type" required>
+                            <option value="depense">💸 DÉPENSE</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>📝 Raison/Nom Service <span style="color:#f44336;">*</span></label>
+                        <input type="text" name="raison" placeholder="Ex: Location bureau, Fournitures..." required>
+                    </div>
+                    <div>
+                        <label>💵 Montant (usd) <span style="color:#f44336;">*</span></label>
+                        <input type="number" name="montant" step="1000" min="1000" placeholder="50000" required>
+                    </div>
+                    <div>
+                        <label>📅 Date/Heure</label>
+                        <input type="datetime-local" name="date_heure">
+                    </div>
+                </div>
+                <button type="submit" class="btn-submit">
+                    <i class="fas fa-save mr-3"></i> 💾 ENREGISTRER DÉPENSE
+                </button>
+            </form>
+            <p class="text-center mt-6 text-sm text-slate-600 italic">
+                💡 <strong>Les recettes sont AUTOMATIQUES</strong> (locations, formations...)
+            </p>
+        </div>
 
-        // Filtres Période
-        async function filtrerPeriode(periode) {
-            periodeActuelle = periode;
-            const url = `/finance/${periode}`;
-            window.location.href = url;
-        }
 
-        // Messagerie Finance
-        async function chargerMessagesFinance() {
-            try {
-                const res = await fetch('/get_messages');
-                const messages = await res.json();
-                const container = document.getElementById('messages-finance');
-                container.innerHTML = messages.map(msg => `
-                    <div class="message-item">
-                        <strong>${msg.origine}:</strong> ${msg.contenu} 
-                        <span class="text-xs text-slate-500">${msg.date}</span>
-                    </div>
-                `).join('');
-            } catch(e) { console.error(e); }
-        }
+        <!-- Historique Transactions -->
+        <div id="historique" class="form-section" style="display: none;">
+            <h2 class="form-title">📋 Historique Transactions ({{ total_transactions }})</h2>
+            {% if transactions %}
+            <div class="table-container">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Type</th>
+                            <th>Raison (Service)</th>
+                            <th>Montant</th>
+                            <th>Date/Heure</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for t in transactions %}
+                        <tr>
+                            <td><strong>#{{ t.id }}</strong></td>
+                            <td>
+                                {% if t.type == 'recette' %}
+                                    <span class="status-paye">💰 {{ t.type|upper }}</span>
+                                {% else %}
+                                    <span class="status-attente">💸 {{ t.type|upper }}</span>
+                                {% endif %}
+                            </td>
+                            <td>{{ t.raison }}</td>
+                            <td class="{{ t.type }}">
+                                {{ "%.0f"|format(t.montant) }} usd
+                            </td>
+                            <td>{{ t.date_heure.strftime('%d/%m/%Y %H:%M') }}</td>
+                            <td class="actions">
+                                <a href="#" class="btn-action btn-view" title="Détails">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                                <a href="#" class="btn-action btn-edit" title="Modifier">
+                                    <i class="fas fa-edit"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+            {% else %}
+            <div style="text-align: center; padding: 100px; color: #666;">
+                <i class="fas fa-coins" style="font-size: 8em; color: #e8f5e8;"></i>
+                <h2>Aucune transaction enregistrée</h2>
+                <p>Ajoutez votre première dépense ci-dessus !</p>
+            </div>
+            {% endif %}
+        </div>
 
-        async function envoyerMsgFinance() {
-            const serviceDest = document.getElementById('service-dest-finance').value;
-            const contenu = document.getElementById('msg-finance').value.trim();
-            if (!contenu) return;
-            
-            await fetch('/send_message', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ service_dest: serviceDest, contenu })
-            });
-            document.getElementById('msg-finance').value = '';
-            chargerMessagesFinance();
-        }
 
-        // Init
-        chargerMessagesFinance();
-        setInterval(chargerMessagesFinance, 5000);
-        
-        document.getElementById('msg-finance').addEventListener('keypress', e => {
-            if (e.key === 'Enter') envoyerMsgFinance();
-        });
-    </script>
+        <!-- Messagerie Finance -->
+        <div id="messagerie" class="form-section" style="display: none;">
+            <h2 class="form-title">💬 Messagerie Finance</h2>
+            <div class="messagerie-finance">
+                <div class="messages-list" id="messages-finance">
+                    <!-- Messages chargés par JS -->
+                </div>
+                <div class="flex gap-3 mt-6">
+                    <select id="service-dest-finance" class="flex-1 p-3 border-2 border-white/30 rounded-xl bg-white/10 text-white">
+                        <option value="direction">Direction</option>
+                        <option value="location">Location</option>
+                        <option value="formation">Formation</option>
+                    </select>
+                    <input type="text" id="msg-finance" class="msg-input" placeholder="Message finance...">
+                    <button onclick="envoyerMsgFinance()" class="msg-send">
+                        <i class="fas fa-paper-plane"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        let periodeActuelle = '{{ periode|default("tous") }}';
+
+
+        // Onglets
+        function showTab(tabId) {
+            document.querySelectorAll('.form-section').forEach(section => {
+                section.style.display = 'none';
+            });
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            document.getElementById(tabId).style.display = 'block';
+            event.target.classList.add('active');
+        }
+
+
+        // Filtres Période
+        async function filtrerPeriode(periode) {
+            periodeActuelle = periode;
+            const url = `/finance/${periode}`;
+            window.location.href = url;
+        }
+
+
+        // Messagerie Finance
+        async function chargerMessagesFinance() {
+            try {
+                const res = await fetch('/get_messages');
+                const messages = await res.json();
+                const container = document.getElementById('messages-finance');
+                container.innerHTML = messages.map(msg => `
+                    <div class="message-item">
+                        <strong>${msg.origine}:</strong> ${msg.contenu} 
+                        <span class="text-xs text-slate-500">${msg.date}</span>
+                    </div>
+                `).join('');
+            } catch(e) { console.error(e); }
+        }
+
+
+        async function envoyerMsgFinance() {
+            const serviceDest = document.getElementById('service-dest-finance').value;
+            const contenu = document.getElementById('msg-finance').value.trim();
+            if (!contenu) return;
+            
+            await fetch('/send_message', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ service_dest: serviceDest, contenu })
+            });
+            document.getElementById('msg-finance').value = '';
+            chargerMessagesFinance();
+        }
+
+
+        // Init
+        chargerMessagesFinance();
+        setInterval(chargerMessagesFinance, 5000);
+        
+        document.getElementById('msg-finance').addEventListener('keypress', e => {
+            if (e.key === 'Enter') envoyerMsgFinance();
+        });
+    </script>
 </body>
-</html>
+</html> 

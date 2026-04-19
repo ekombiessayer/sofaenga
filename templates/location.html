@@ -124,7 +124,7 @@
                     <strong id="total-locations">{{ locations|length|default(0) }}</strong> locations actives
                 </div>
                 <div class="stat-item">
-                    <strong id="total-recu-location">{{ "%.0f"|format(locations|sum(attribute='montant')|default(0)) }}</strong> FCFA encaissés
+                    <strong id="total-recu-location">{{ "%.0f"|format(locations|sum(attribute='montant')|default(0)) }}</strong> usd encaissés
                 </div>
             </div>
             
@@ -168,7 +168,7 @@
                         </select>
                     </div>
                     <div>
-                        <label>💰 Prix/Jour (FCFA) <span style="color:#ef4444;">*</span></label>
+                        <label>💰 Prix/Jour (usd) <span style="color:#ef4444;">*</span></label>
                         <input type="number" name="prix_jour" id="prix_jour" step="5000" min="30000" placeholder="50000" required onchange="calculerMontant()">
                     </div>
                     <div>
@@ -183,7 +183,7 @@
                 
                 <!-- CALCULS AUTOMATIQUES -->
                 <div class="calcul-auto">
-                    <div>Montant Total: <span id="montant-total" class="champ-calcul">0 FCFA</span></div>
+                    <div>Montant Total: <span id="montant-total" class="champ-calcul">0 usd</span></div>
                     <div>Date Fin Auto: <span id="date-fin-auto" class="champ-calcul">--</span></div>
                     <p class="text-sm mt-2 opacity-90">✅ Recette automatiquement ajoutée en Finance</p>
                 </div>
@@ -218,7 +218,7 @@
                         <td>{{ loc.nom_client }}</td>
                         <td><span class="font-bold">{{ loc.voiture }}</span></td>
                         <td>{{ loc.nb_jours }} j</td>
-                        <td class="montant-total">{{ "%.0f"|format(loc.montant) }} FCFA</td>
+                        <td class="montant-total">{{ "%.0f"|format(loc.montant) }} usd</td>
                         <td>{{ loc.date_debut.strftime('%d/%m') }} → {{ loc.date_fin.strftime('%d/%m') }}</td>
                         <td><a href="https://wa.me/{{ loc.tel }}" class="text-blue-400 hover:text-blue-300" target="_blank">{{ loc.tel }}</a></td>
                         <td>
@@ -234,7 +234,7 @@
                 <tfoot>
                     <tr>
                         <td colspan="4"><strong>TOTAL GÉNÉRAL</strong></td>
-                        <td class="montant-total font-black text-2xl">{{ "%.0f"|format(locations|sum(attribute='montant')|default(0)) }} FCFA</td>
+                        <td class="montant-total font-black text-2xl">{{ "%.0f"|format(locations|sum(attribute='montant')|default(0)) }} usd</td>
                         <td colspan="3"></td>
                     </tr>
                 </tfoot>
@@ -268,7 +268,7 @@
             const prixJour = parseFloat(document.getElementById('prix_jour').value) || 0;
             const nbJours = parseInt(document.getElementById('nb_jours').value) || 0;
             const total = prixJour * nbJours;
-            document.getElementById('montant-total').textContent = total.toLocaleString() + ' FCFA';
+            document.getElementById('montant-total').textContent = total.toLocaleString() + ' usd';
         }
 
         function calculerDateFin() {
